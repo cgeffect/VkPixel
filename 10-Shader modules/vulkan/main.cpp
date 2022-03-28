@@ -344,6 +344,8 @@ private:
         }
     }
 
+    //着色器阶段创建
+    //着色器模块只是我们之前从文件中加载的着色器字节码和其中定义的函数的一个薄包装器。在创建图形管道之前，不会发生 SPIR-V 字节码到机器代码的编译和链接以供 GPU 执行。这意味着一旦管道创建完成，我们就可以再次销毁着色器模块，这就是为什么我们将在createGraphicsPipeline函数中将它们设为局部变量而不是类成员：
     void createGraphicsPipeline() {
         auto vertShaderCode = readFile("/Users/jason/Jason/project/vulkan-tutorial/10-Shader modules/vulkan/shaders/vert.spv");
         auto fragShaderCode = readFile("/Users/jason/Jason/project/vulkan-tutorial/10-Shader modules/vulkan/shaders/frag.spv");
@@ -351,9 +353,11 @@ private:
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
 
+        //要实际使用着色器，我们需要通过VkPipelineShaderStageCreateInfo结构将它们分配给特定的管道阶段，作为实际管道创建过程的一部分。
         VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
         vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+        //接下来的两个成员指定包含代码的着色器模块，以及要调用的函数，称为入口点。这意味着可以将多个片段着色器组合到一个着色器模块中，并使用不同的入口点来区分它们的行为。但是，在这种情况下，我们将坚持使用标准 main。
         vertShaderStageInfo.module = vertShaderModule;
         vertShaderStageInfo.pName = "main";
 
@@ -363,22 +367,31 @@ private:
         fragShaderStageInfo.module = fragShaderModule;
         fragShaderStageInfo.pName = "main";
 
+        //最后定义一个包含这两个结构的数组，稍后我们将在实际的管道创建步骤中使用它来引用它们。
         VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
         vkDestroyShaderModule(device, fragShaderModule, nullptr);
         vkDestroyShaderModule(device, vertShaderModule, nullptr);
+        
+        //这就是描述流水线的可编程阶段的全部内容。
     }
 
+    //创建着色器模块
+    //将代码传递给管道之前，我们必须将它包装在一个 VkShaderModule对象中
     VkShaderModule createShaderModule(const std::vector<char>& code) {
+        //创建着色器模块很简单，我们只需要用字节码和长度指定一个指向缓冲区的指针。
         VkShaderModuleCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
         createInfo.codeSize = code.size();
         createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
         VkShaderModule shaderModule;
+        //创建VkShaderModule
         if (vkCreateShaderModule(device, &createInfo, nullptr, &shaderModule) != VK_SUCCESS) {
             throw std::runtime_error("failed to create shader module!");
         }
+        
+        //创建着色器模块后，可以立即释放包含代码的缓冲区
 
         return shaderModule;
     }
