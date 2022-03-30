@@ -123,6 +123,7 @@ private:
     }
 
     void cleanup() {
+        //我们应该在它们所基于的图像视图和渲染通道之前删除帧缓冲区，但只有在我们完成渲染之后：
         for (auto framebuffer : swapChainFramebuffers) {
             vkDestroyFramebuffer(device, framebuffer, nullptr);
         }
@@ -495,6 +496,7 @@ private:
         pipelineInfo.subpass = 0;
         pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
+        //创建图形管道
         if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
             throw std::runtime_error("failed to create graphics pipeline!");
         }
@@ -504,8 +506,15 @@ private:
     }
 
     void createFramebuffers() {
+        //调整容器的大小以容纳所有帧缓冲区：
         swapChainFramebuffers.resize(swapChainImageViews.size());
 
+        //遍历图像视图并从中创建帧缓冲区：
+        //帧缓冲区的创建非常简单。我们首先需要指定需要与哪个renderPass帧缓冲区兼容。您只能将帧缓冲区与它兼容的渲染通道一起使用，这大致意味着它们使用相同数量和类型的附件。
+        
+        //attachmentCount和pAttachments参数指定VkImageView 应绑定到渲染通道pAttachment数组中相应附件描述的对象。
+
+        //width和height参数是不言自明的，指layers的是图像阵列中的层数。我们的交换链图像是单张图像，所以层数是1.
         for (size_t i = 0; i < swapChainImageViews.size(); i++) {
             VkImageView attachments[] = {
                 swapChainImageViews[i]

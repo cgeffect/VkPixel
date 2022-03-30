@@ -369,28 +369,53 @@ private:
 
         VkPipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
 
+        //顶点输入
+        //该VkPipelineVertexInputStateCreateInfo结构描述了将传递给顶点着色器的顶点数据的格式。它大致以两种方式描述了这一点：
+        //绑定：数据之间的间距以及数据是逐顶点还是逐实例
+        //属性描述：传递给顶点着色器的属性的类型，从哪个绑定加载它们以及在哪个偏移量
+        //因为我们直接在顶点着色器中对顶点数据进行硬编码，所以我们将填写这个结构以指定暂时没有要加载的顶点数据。
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
         vertexInputInfo.vertexBindingDescriptionCount = 0;
         vertexInputInfo.vertexAttributeDescriptionCount = 0;
 
+        //输入组件
+        //该VkPipelineInputAssemblyStateCreateInfo结构描述了两件事：将从顶点绘制什么样的几何图形以及是否应该启用图元重启
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+        //指定绘制的几何图形
+        /*
+         VK_PRIMITIVE_TOPOLOGY_POINT_LIST: 来自顶点的点
+         VK_PRIMITIVE_TOPOLOGY_LINE_LIST：每2个顶点的线，不重复使用
+         VK_PRIMITIVE_TOPOLOGY_LINE_STRIP：每行的结束顶点用作下一行的开始顶点
+         VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST: 来自每 3 个顶点的三角形，不重复使用
+         VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP：每个三角形的第二个和第三个顶点用作下一个三角形的前两个顶点
+         */
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        /*
+         通常，顶点是按顺序按索引从顶点缓冲区加载的，但是使用元素缓冲区，您可以指定要自己使用的索引。这允许您执行优化，例如重用顶点。如果您将 primitiveRestartEnable 成员设置为VK_TRUE，则可以_STRIP通过使用 0xFFFF或的特殊索引来分解拓扑模式中的线和三角形0xFFFFFFFF。
+         */
+        //本教程中绘制三角形，因此我们将坚持以下结构数据：
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
+        //视口和裁剪
         VkViewport viewport{};
         viewport.x = 0.0f;
         viewport.y = 0.0f;
+        //交换链(fbo)的大小可能与视口大小不同, 应该使用fbo的大小
         viewport.width = (float) swapChainExtent.width;
         viewport.height = (float) swapChainExtent.height;
+        //minDepth和maxDepth值指定用于帧缓冲区的深度值范围。这些值必须在[0.0f, 1.0f]范围内，但 minDepth可能高于maxDepth。如果你没有做任何特别的事情，那么你应该坚持0.0fand的标准值1.0f。
         viewport.minDepth = 0.0f;
         viewport.maxDepth = 1.0f;
 
+        //绘制整个帧缓冲区
         VkRect2D scissor{};
         scissor.offset = {0, 0};
         scissor.extent = swapChainExtent;
 
+        //把视口和裁剪组装进VkPipelineViewportStateCreateInfo
+        //可以在某些显卡上使用多个视口和剪刀矩形，因此其成员引用它们的数组
         VkPipelineViewportStateCreateInfo viewportState{};
         viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
         viewportState.viewportCount = 1;
@@ -398,25 +423,59 @@ private:
         viewportState.scissorCount = 1;
         viewportState.pScissors = &scissor;
 
+        //光栅化器
+        //光栅化器获取由顶点着色器中的顶点形成的几何图形，并将其转换为片段以由片段着色器着色。它还执行深度测试、 面部剔除和剪刀测试，并且可以配置为输出填充整个多边形或仅边缘的片段（线框渲染）。所有这些都是使用该 VkPipelineRasterizationStateCreateInfo结构配置的。
         VkPipelineRasterizationStateCreateInfo rasterizer{};
         rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-        rasterizer.depthClampEnable = VK_FALSE;
-        rasterizer.rasterizerDiscardEnable = VK_FALSE;
+        rasterizer.depthClampEnable = VK_FALSE; //禁用深度, 之会产生2d效果
+        rasterizer.rasterizerDiscardEnable = VK_FALSE;//设置为VK_TRUE，则几何图形永远不会通过光栅化阶段。这基本上禁用了帧缓冲区的任何输出。
+        //如何为几何体生成片段。可以使用以下模式：
+        
+        //VK_POLYGON_MODE_FILL：用片段填充多边形区域
+        //VK_POLYGON_MODE_LINE: 多边形边被画成线
+        //VK_POLYGON_MODE_POINT：多边形顶点被绘制为点
+        //使用填充以外的任何模式都需要启用 GPU 功能。
         rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizer.lineWidth = 1.0f;
+        //cullMode变量确定要使用的面剔除类型。您可以禁用剔除、剔除正面、剔除背面或两者。该 frontFace变量指定被视为正面的面的顶点顺序，可以是顺时针或逆时针。
         rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+        //光栅化器可以通过添加一个常数值或根据片段的斜率对它们进行偏置来改变深度值。这有时用于阴影贴图，但我们不会使用它。刚设置depthBiasEnable为VK_FALSE。
         rasterizer.depthBiasEnable = VK_FALSE;
-
+        rasterizer.depthBiasConstantFactor = 0.0f; // Optional
+        rasterizer.depthBiasClamp = 0.0f; // Optional
+        rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
+        
+        //多重采样
+        //该VkPipelineMultisampleStateCreateInfo结构配置了多重采样，这是执行抗锯齿的方法之一。它通过将光栅化到同一像素的多个多边形的片段着色器结果组合在一起来工作。这主要发生在边缘，这也是最明显的锯齿伪影发生的地方。因为如果只有一个多边形映射到一个像素，它不需要多次运行片段着色器，所以它比简单地渲染到更高分辨率然后缩小比例要便宜得多。启用它需要启用 GPU 功能。
+        //我们将在后面的章节中重新讨论多重采样，现在让我们禁用它。
         VkPipelineMultisampleStateCreateInfo multisampling{};
         multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
         multisampling.sampleShadingEnable = VK_FALSE;
         multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
+        multisampling.minSampleShading = 1.0f; // Optional
+        multisampling.pSampleMask = nullptr; // Optional
+        multisampling.alphaToCoverageEnable = VK_FALSE; // Optional
+        multisampling.alphaToOneEnable = VK_FALSE; // Optional
+        
+        //深度和模板测试
+        //如果您使用的是深度和/或模板缓冲区，那么您还需要使用VkPipelineDepthStencilStateCreateInfo. 我们现在没有，所以我们可以简单地传递 anullptr
+        //nullptr
+        
+        //颜色混合
+        //片段着色器返回颜色后，需要将其与帧缓冲区中已有的颜色组合。这种转换称为颜色混合，有两种方法可以做到：
+        
+        //混合旧值和新值以产生最终颜色
+        //使用按位运算组合旧值和新值
+        //有两种类型的结构来配置颜色混合。
+        //第一个结构 VkPipelineColorBlendAttachmentState包含每个附加帧缓冲区的配置
+        //第二个结构VkPipelineColorBlendStateCreateInfo 包含全局颜色混合设置。
+        //在我们的例子中，我们只有一个帧缓冲区：
         VkPipelineColorBlendAttachmentState colorBlendAttachment{};
         colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
         colorBlendAttachment.blendEnable = VK_FALSE;
 
+        //如果要使用第二种混合方法（按位组合），则应设置logicOpEnable为VK_TRUE. 然后可以在logicOp字段中指定按位运算。请注意，这将自动禁用第一种方法，就像您为每个附加的帧缓冲区设置blendEnable了一样！VK_FALSE也将colorWriteMask在此模式下用于确定帧缓冲区中的哪些通道实际上会受到影响。也可以禁用这两种模式，就像我们在这里所做的那样，在这种情况下，片段颜色将不加修改地写入帧缓冲区。
         VkPipelineColorBlendStateCreateInfo colorBlending{};
         colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
         colorBlending.logicOpEnable = VK_FALSE;
@@ -428,17 +487,35 @@ private:
         colorBlending.blendConstants[2] = 0.0f;
         colorBlending.blendConstants[3] = 0.0f;
 
+        //动态
+        //我们在前面的结构中指定的有限数量的状态实际上 可以在不重新创建管道的情况下更改。
+        //这将导致这些值的配置被忽略，您将需要在绘图时指定数据。我们将在以后的章节中回到这一点。nullptr如果您没有任何动态状态，则可以稍后替换此结构。
+        
+        
+        //管道布局
+        //在着色器中使用uniform值, 这些uniform值需要在管道创建期间通过创建 VkPipelineLayout对象来指定。即使我们在下一章之前不会使用它们，我们仍然需要创建一个空的管道布局。
         VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
         pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-        pipelineLayoutInfo.setLayoutCount = 0;
-        pipelineLayoutInfo.pushConstantRangeCount = 0;
+        pipelineLayoutInfo.setLayoutCount = 0; // Optional
+        pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+        //该结构还指定了push constants，这是将动态值传递给着色器的另一种方式，我们可能会在以后的章节中介绍。
+        pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
+        pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
         if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
             throw std::runtime_error("failed to create pipeline layout!");
         }
-
+        //管道布局将在程序的整个生命周期中被引用，所以它应该在最后被销毁：
+        
         vkDestroyShaderModule(device, fragShaderModule, nullptr);
         vkDestroyShaderModule(device, vertShaderModule, nullptr);
+        
+        /*
+         结论
+         这就是所有的固定功能状态！从头开始设置所有这些需要大量工作，但优点是我们现在几乎完全了解图形管道中发生的一切！这减少了遇到意外行为的机会，因为某些组件的默认状态不是您所期望的。
+
+         然而，在我们最终创建图形管道之前，还需要创建一个对象，那就是渲染通道。
+         */
     }
 
     VkShaderModule createShaderModule(const std::vector<char>& code) {

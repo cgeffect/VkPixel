@@ -351,26 +351,74 @@ private:
         }
     }
 
+    //渲染通道
     void createRenderPass() {
+        //附件说明
         VkAttachmentDescription colorAttachment{};
+        //颜色附件的format应该与交换链图像的格式相匹配，我们还没有对多重采样做任何事情，所以我们将坚持使用 1 个样本。
         colorAttachment.format = swapChainImageFormat;
         colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+        /*
+         确定在渲染之前和渲染之后如何处理附件中的数据loadOp。storeOp我们有以下选择 loadOp：
+
+         VK_ATTACHMENT_LOAD_OP_LOAD：保留附件的现有内容
+         VK_ATTACHMENT_LOAD_OP_CLEAR：在开始时将值清除为常量
+         VK_ATTACHMENT_LOAD_OP_DONT_CARE：现有内容未定义；我们不在乎他们
+         在我们的例子中，我们将在绘制新帧之前使用清除操作将帧缓冲区清除为黑色。只有两种可能 storeOp：
+
+         VK_ATTACHMENT_STORE_OP_STORE: 渲染的内容将存储在内存中，以后可以读取
+         VK_ATTACHMENT_STORE_OP_DONT_CARE: 渲染操作后帧缓冲区的内容将不确定
+         我们有兴趣在屏幕上看到渲染的三角形，所以我们在这里进行存储操作。
+         */
         colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
         colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        
+        //我们的应用程序不会对模板缓冲区做任何事情，因此加载和存储的结果是无关紧要的。storeOpstencilLoadOpstencilStoreOp
         colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
         colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        
+        //Vulkan 中的纹理和帧缓冲区由VkImage具有特定像素格式的对象表示，但是内存中像素的布局可能会根据您尝试对图像执行的操作而改变。
+        //VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL：用作颜色附件的图像
+        //VK_IMAGE_LAYOUT_PRESENT_SRC_KHR：要在交换链中呈现的图像
+        //VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL：用作内存复制操作目标的图像
+        //initialLayout指定在渲染过程开始之前图像将具有的布局。finalLayout指定要在渲染过程完成时自动转换到的布局。使用VK_IMAGE_LAYOUT_UNDEFINEDfor initialLayout意味着我们不关心图像之前的布局。这个特殊值的警告是图像的内容不能保证被保留，但这并不重要，因为我们要清除无论如何。我们希望图像在渲染后使用交换链准备好呈现，这就是我们使用VK_IMAGE_LAYOUT_PRESENT_SRC_KHRas 的原因finalLayout。
         colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
         colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
+        
+        //子通道和附件参考
+        //Subpasses and attachment references
+        /*
+         单个渲染通道可以包含多个子通道。子通道是后续渲染操作，它依赖于先前通道中帧缓冲区的内容，例如一个接一个地应用的一系列后处理效果。如果您将这些渲染操作分组到一个渲染过程中，那么 Vulkan 能够重新排序操作并节省内存带宽以获得更好的性能。然而，对于我们的第一个三角形，我们将坚持使用单个子通道。
+
+         每个子通道都引用一个或多个我们使用前面部分中的结构描述的附件。这些引用本身 VkAttachmentReference就是如下结构：
+         */
         VkAttachmentReference colorAttachmentRef{};
+        //attachment参数通过附件描述数组中的索引指定要引用的附件。我们的数组由一个 VkAttachmentDescription组成 ，所以它的索引是0
         colorAttachmentRef.attachment = 0;
+        //layout指定我们希望附件在使用此引用的子通道期间具有的布局。当 subpass 启动时，Vulkan 会自动将附件转换到此布局。VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL顾名思义，我们打算将附件用作颜色缓冲区，布局将为我们提供最佳性能。
         colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+        //子通道描述符
         VkSubpassDescription subpass{};
+        //Vulkan 将来也可能支持计算子通道，因此我们必须明确说明这是一个图形子通道
         subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+        /*
+         该数组中附件的索引是直接从片段着色器中使用layout(location = 0) out vec4 outColor指令引用的！
+
+         子通道可以引用以下其他类型的附件：
+
+         pInputAttachments: 从着色器中读取的附件
+         pResolveAttachments: 用于多重采样颜色附件的附件
+         pDepthStencilAttachment: 深度和模板数据的附件
+         pPreserveAttachments：此子通道未使用但必须保留其数据的附件
+         */
         subpass.colorAttachmentCount = 1;
         subpass.pColorAttachments = &colorAttachmentRef;
 
+        
+        //渲染通道
+        //通过 VkRenderPassCreateInfo使用附件和子通道数组填充结构来创建渲染通道对象renderPass。VkAttachmentReference对象使用此数组的索引引用附件。
         VkRenderPassCreateInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
         renderPassInfo.attachmentCount = 1;
@@ -381,6 +429,9 @@ private:
         if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
             throw std::runtime_error("failed to create render pass!");
         }
+        
+        //就像管道布局一样，渲染通道将在整个程序中被引用，所以它应该只在最后被清理：
+        
     }
 
     void createGraphicsPipeline() {
