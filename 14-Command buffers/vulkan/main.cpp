@@ -94,7 +94,11 @@ private:
     VkPipelineLayout pipelineLayout;
     VkPipeline graphicsPipeline;
 
+    //命令池
+    //我们必须先创建一个命令池，然后才能创建命令缓冲区。命令池管理用于存储缓冲区的内存，并从中分配命令缓冲区
     VkCommandPool commandPool;
+    //命令缓冲区分配
+    //创建一个VkCommandBuffer对象作为类成员。命令缓冲区将在其命令池被销毁时自动释放，因此我们不需要显式清理。
     VkCommandBuffer commandBuffer;
 
     void initWindow() {
@@ -537,20 +541,29 @@ private:
         QueueFamilyIndices queueFamilyIndices = findQueueFamilies(physicalDevice);
 
         VkCommandPoolCreateInfo poolInfo{};
+        //VK_COMMAND_POOL_CREATE_TRANSIENT_BIT：提示命令缓冲区经常用新命令重新记录（可能会改变内存分配行为）
+        //VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT：允许单独重新记录命令缓冲区，如果没有此标志，它们都必须一起重置
         poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
         poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
         poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 
+        //vkCreateCommandPool使用该函数完成创建命令池。它没有任何特殊参数。命令将在整个程序中用于在屏幕上绘制东西，所以池应该只在最后被销毁：
         if (vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
             throw std::runtime_error("failed to create command pool!");
         }
     }
 
+    //从命令池中分配单个命令缓冲区的函数。
     void createCommandBuffer() {
         VkCommandBufferAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
         allocInfo.commandPool = commandPool;
+        //该level参数指定分配的命令缓冲区是主命令缓冲区还是辅助命令缓冲区。
+        
+        //VK_COMMAND_BUFFER_LEVEL_PRIMARY：可以提交到队列执行，但不能从其他命令缓冲区调用。
+        //VK_COMMAND_BUFFER_LEVEL_SECONDARY：不能直接提交，但可以从主命令缓冲区调用。
         allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        //由于我们只分配一个命令缓冲区，因此commandBufferCount参数只是一个。
         allocInfo.commandBufferCount = 1;
 
         if (vkAllocateCommandBuffers(device, &allocInfo, &commandBuffer) != VK_SUCCESS) {
@@ -558,6 +571,8 @@ private:
         }
     }
 
+    //命令缓冲区记录
+    //我们想要执行的命令写入命令​​缓冲区
     void recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
         VkCommandBufferBeginInfo beginInfo{};
         beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -566,23 +581,47 @@ private:
             throw std::runtime_error("failed to begin recording command buffer!");
         }
 
+        //开始渲染通道
         VkRenderPassBeginInfo renderPassInfo{};
         renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        //渲染过程本身和要绑定的附件
         renderPassInfo.renderPass = renderPass;
+        //fbo
         renderPassInfo.framebuffer = swapChainFramebuffers[imageIndex];
+        //渲染区域的大小
         renderPassInfo.renderArea.offset = {0, 0};
         renderPassInfo.renderArea.extent = swapChainExtent;
 
+        //最后两个参数定义了用于 的清除值 VK_ATTACHMENT_LOAD_OP_CLEAR，我们将其用作颜色附件的加载操作。我已将透明颜色定义为具有 100% 不透明度的黑色。
         VkClearValue clearColor = {{{0.0f, 0.0f, 0.0f, 1.0f}}};
         renderPassInfo.clearValueCount = 1;
         renderPassInfo.pClearValues = &clearColor;
 
+        //现在可以开始渲染过程了。所有记录命令的函数都可以通过它们的vkCmd前缀来识别。它们都返回void，所以在我们完成录制之前不会有错误处理。
+        /*
+         每个命令的第一个参数始终是记录命令的命令缓冲区。第二个参数指定我们刚刚提供的渲染通道的详细信息。最后一个参数控制如何提供渲染过程中的绘图命令。它可以具有以下两个值之一：
+
+         VK_SUBPASS_CONTENTS_INLINE：渲染通道命令将嵌入到主命令缓冲区本身中，并且不会执行辅助命令缓冲区。
+         VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS：渲染通道命令将从辅助命令缓冲区执行。
+         我们不会使用辅助命令缓冲区，所以我们将使用第一个选项。
+         */
         vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-            vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+        //基本绘图命令,绑定图形管道：
+        //第二个参数指定管道对象是图形还是计算管道。我们现在已经告诉 Vulkan 在图形管道中执行哪些操作以及在片段着色器中使用哪个附件，所以剩下的就是告诉它绘制三角形：
+        vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 
-            vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+        /*
+         除了命令缓冲区之外，它还有以下参数：
 
+         vertexCount：即使我们没有顶点缓冲区，但从技术上讲，我们仍然需要绘制 3 个顶点。
+         instanceCount：用于实例渲染，1如果你不这样做，请使用。
+         firstVertex: 用作顶点缓冲区的偏移量，定义 的最小值gl_VertexIndex。
+         firstInstance：用作实例渲染的偏移量，定义 的最小值gl_InstanceIndex。
+         */
+        vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+
+        //结束渲染过程
         vkCmdEndRenderPass(commandBuffer);
 
         if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
