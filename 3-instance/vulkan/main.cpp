@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <cstdlib>
 
+#include "Instance.hpp"
+
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
@@ -21,6 +23,7 @@ private:
     GLFWwindow* window;
 
     VkInstance instance;
+    vk::Instance::Ptr mInstance{ nullptr };
 
     void initWindow() {
         glfwInit();
@@ -32,7 +35,8 @@ private:
     }
 
     void initVulkan() {
-        createInstance();
+//        createInstance();
+        mInstance = vk::Instance::create();
     }
 
     void mainLoop() {
@@ -42,7 +46,9 @@ private:
     }
 
     void cleanup() {
-        vkDestroyInstance(instance, nullptr);
+        if (instance) {
+            vkDestroyInstance(instance, nullptr);
+        }
 
         glfwDestroyWindow(window);
 

@@ -18,7 +18,11 @@
 int main() {
     glfwInit();
 
+    //关掉opengl api
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    //禁止窗口大小改变
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    
     GLFWwindow* window = glfwCreateWindow(800, 600, "Vulkan window", nullptr, nullptr);
 
     uint32_t extensionCount = 0;
