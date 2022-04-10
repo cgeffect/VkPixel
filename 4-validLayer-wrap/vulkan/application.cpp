@@ -12,7 +12,6 @@ namespace FF {
     void Application::initWindow() {
         glfwInit();
         
-        
         //设置环境，关掉opengl API 并且禁止窗口改变大小
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
