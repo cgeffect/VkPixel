@@ -122,6 +122,7 @@ namespace FF::Wrapper {
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
         //指定从哪个队列族里面获取队列
 		queueCreateInfo.queueFamilyIndex = mGraphicQueueFamily.value();
+        printf("queueCreateInfo.queueFamilyIndex = %d\n", mGraphicQueueFamily.value());
         //要获取几个队列
 		queueCreateInfo.queueCount = 1;
 

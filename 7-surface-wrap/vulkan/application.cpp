@@ -14,9 +14,13 @@ namespace FF {
 	}
 
 	void Application::initVulkan() {
+        //创建vk实例
 		mInstance = Wrapper::Instance::create(true);
+        
+        //创建vksurface
 		mSurface = Wrapper::WindowSurface::create(mInstance, mWindow);
 
+        //创建vk设备
 		mDevice = Wrapper::Device::create(mInstance, mSurface);
 	}
 

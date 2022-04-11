@@ -38,6 +38,7 @@ namespace FF::Wrapper {
 		std::optional<uint32_t> mGraphicQueueFamily;
 		VkQueue	mGraphicQueue{ VK_NULL_HANDLE };
 
+        //存储当前显示任务队列族的id
 		std::optional<uint32_t> mPresentQueueFamily;
 		VkQueue mPresentQueue{ VK_NULL_HANDLE };
 
