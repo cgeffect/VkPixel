@@ -19,9 +19,10 @@ namespace FF::Wrapper {
 
 	//辅助函数
 	static VkResult CreateDebugUtilsMessengerEXT(VkInstance instance,
-		const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-		const VkAllocationCallbacks* pAllocator,
-		VkDebugUtilsMessengerEXT* debugMessenger) {
+                                                 const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+                                                 const VkAllocationCallbacks* pAllocator,
+                                                 VkDebugUtilsMessengerEXT* debugMessenger) {
+        //获取vkCreateDebugUtilsMessengerEXT函数
 		auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 	
 		if (func != nullptr) {
@@ -32,9 +33,10 @@ namespace FF::Wrapper {
 		}
 	}
 
-	static void DestroyDebugUtilsMessengerEXT(VkInstance instance, 
-		VkDebugUtilsMessengerEXT  debugMessenger,
-		const VkAllocationCallbacks* pAllocator) {
+	static void DestroyDebugUtilsMessengerEXT(VkInstance instance,
+                                              VkDebugUtilsMessengerEXT  debugMessenger,
+                                              const VkAllocationCallbacks* pAllocator) {
+        //获取vkDestroyDebugUtilsMessengerEXT函数
 		auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
 
 		if (func != nullptr) {
