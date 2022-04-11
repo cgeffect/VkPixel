@@ -4,8 +4,11 @@ namespace FF::Wrapper {
 
 	Device::Device(Instance::Ptr instance) {
 		mInstance = instance;
+        //创建物理设备
 		pickPhysicalDevice();
+        //初始化队列族
 		initQueueFamilies(mPhysicalDevice);
+        //创建逻辑设备
 		createLogicalDevice();
 	}
 
@@ -47,6 +50,7 @@ namespace FF::Wrapper {
 		}
 	}
 
+    //设备打分
 	int Device::rateDevice(VkPhysicalDevice device) {
 		int score = 0;
 
@@ -113,22 +117,25 @@ namespace FF::Wrapper {
 	}
 
 	void Device::createLogicalDevice() {
-		//填写创建信息
+		//填写队列创建信息
 		VkDeviceQueueCreateInfo queueCreateInfo = {};
 		queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        //指定从哪个队列族里面获取队列
 		queueCreateInfo.queueFamilyIndex = mGraphicQueueFamily.value();
+        //要获取几个队列
 		queueCreateInfo.queueCount = 1;
 
+        //设置队列的优先级
 		float queuePriority = 1.0;
 		queueCreateInfo.pQueuePriorities = &queuePriority;
 
-		//填写逻辑设备创建信息
-		VkPhysicalDeviceFeatures deviceFeatures = {};
-
+        //通过队列信息创建VkDeviceCreateInfo
 		VkDeviceCreateInfo deviceCreateInfo = {};
 		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 		deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
 		deviceCreateInfo.queueCreateInfoCount = 1;
+        VkPhysicalDeviceFeatures deviceFeatures = {};
+        //设备特性, 设置为0
 		deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
 		deviceCreateInfo.enabledExtensionCount = 0;
 
@@ -141,10 +148,14 @@ namespace FF::Wrapper {
 			deviceCreateInfo.enabledLayerCount = 0;
 		}
 
+        //创建物理设备
 		if (vkCreateDevice(mPhysicalDevice, &deviceCreateInfo, nullptr, &mDevice) != VK_SUCCESS) {
 			throw std::runtime_error("Error:failed to create logical device");
 		}
 
+        //从图形功能的队列族里面获取可渲染图形的队列
 		vkGetDeviceQueue(mDevice, mGraphicQueueFamily.value(), 0, &mGraphicQueue);
+        
+        printf("");
 	}
 }

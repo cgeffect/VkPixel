@@ -117,10 +117,10 @@
 		96C4D4C127FAF8EF001FBE0D /* vulkanWrapper */ = {
 			isa = PBXGroup;
 			children = (
-				96C4D4C227FAF8EF001FBE0D /* device.h */,
 				96C4D4C427FAF8EF001FBE0D /* device.cpp */,
-				96C4D4C527FAF8EF001FBE0D /* instance.h */,
+				96C4D4C227FAF8EF001FBE0D /* device.h */,
 				96C4D4C627FAF8EF001FBE0D /* instance.cpp */,
+				96C4D4C527FAF8EF001FBE0D /* instance.h */,
 			);
 			path = vulkanWrapper;
 			sourceTree = "<group>";
