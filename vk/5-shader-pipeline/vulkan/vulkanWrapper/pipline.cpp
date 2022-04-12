@@ -61,6 +61,7 @@ namespace FF::Wrapper {
 			throw std::runtime_error("Error: failed to create pipeline layout");
 		}
 
+        //给渲染管线配置每一个步骤的内容
 		VkGraphicsPipelineCreateInfo pipelineCreateInfo{};
 		pipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
 
