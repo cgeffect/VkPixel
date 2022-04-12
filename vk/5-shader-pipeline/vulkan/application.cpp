@@ -15,6 +15,7 @@ namespace FF {
 
 	void Application::initVulkan() {
 		mInstance = Wrapper::Instance::create(true);
+        
 		mSurface = Wrapper::WindowSurface::create(mInstance, mWindow);
 
 		mDevice = Wrapper::Device::create(mInstance, mSurface);
@@ -22,6 +23,7 @@ namespace FF {
 		mSwapChain = Wrapper::SwapChain::create(mDevice, mWindow, mSurface);
 
 		mPipeline = Wrapper::Pipeline::create(mDevice);
+        
 		createPipeline();
 	}
 
@@ -39,16 +41,18 @@ namespace FF {
 		scissor.offset = {0, 0};
 		scissor.extent = {WIDTH, HEIGHT};
 
+        //设置视口
 		mPipeline->setViewports({ viewport });
+        //设置裁剪
 		mPipeline->setScissors({scissor});
 
 		//设置shader
 		std::vector<Wrapper::Shader::Ptr> shaderGroup{};
 
-		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/10-shader-pipeline/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
+		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/5-shader-pipeline/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
 		shaderGroup.push_back(shaderVertex);
 
-		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/10-shader-pipeline/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
+		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/5-shader-pipeline/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
 		shaderGroup.push_back(shaderFragment);
 		
 		mPipeline->setShaderGroup(shaderGroup);

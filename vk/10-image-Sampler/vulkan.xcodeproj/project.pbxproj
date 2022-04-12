@@ -59,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		961D32A328053F0C00D6AC8F /* bgra.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgra.jpg; sourceTree = "<group>"; };
 		96687E312802CE7200DCF281 /* uniformManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uniformManager.h; sourceTree = "<group>"; };
 		96687E332802CE7200DCF281 /* lessionShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lessionShader.frag; sourceTree = "<group>"; };
 		96687E342802CE7200DCF281 /* fs.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = fs.spv; sourceTree = "<group>"; };
@@ -164,6 +165,7 @@
 		96687E3E2802CE7200DCF281 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				961D32A328053F0C00D6AC8F /* bgra.jpg */,
 				96687E3F2802CE7200DCF281 /* dragonBall.jpg */,
 			);
 			path = assets;

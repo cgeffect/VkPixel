@@ -44,7 +44,7 @@ void UniformManager::init(const Wrapper::Device::Ptr& device, const Wrapper::Com
 	textureParam->mCount = 1;
 	textureParam->mDescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	textureParam->mStage = VK_SHADER_STAGE_FRAGMENT_BIT;
-	textureParam->mTexture = Texture::create(mDevice, commandPool, "/Users/jason/Jason/project/vulkan-tutorial/20-image-Sampler-wrap/vulkan/assets/dragonBall.jpg");
+	textureParam->mTexture = Texture::create(mDevice, commandPool, "/Users/jason/Jason/project/vulkan-tutorial/vk/10-image-Sampler/vulkan/assets/bgra.jpg");
 
 	mUniformParams.push_back(textureParam);
 

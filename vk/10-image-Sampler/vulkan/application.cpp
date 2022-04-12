@@ -74,10 +74,10 @@ namespace FF {
 		//…Ë÷√shader
 		std::vector<Wrapper::Shader::Ptr> shaderGroup{};
 
-		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/20-image-Sampler-wrap/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
+		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/10-image-Sampler/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
 		shaderGroup.push_back(shaderVertex);
 
-		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/20-image-Sampler-wrap/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
+		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/10-image-Sampler/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
 		shaderGroup.push_back(shaderFragment);
 		
 		mPipeline->setShaderGroup(shaderGroup);
