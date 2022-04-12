@@ -7,6 +7,7 @@ namespace FF::Wrapper {
 		mWindow = window;
 		mSurface = surface;
 
+        //SwapChainSupportInfo
 		auto swapChainSupportInfo = querySwapChainSupportInfo();
 
 		//选择vkformat
@@ -20,6 +21,8 @@ namespace FF::Wrapper {
 
 		//设置图像缓冲数量
 		mImageCount = swapChainSupportInfo.mCapabilities.minImageCount + 1;
+        std::cout << swapChainSupportInfo.mCapabilities.minImageCount << std::endl;
+        std::cout << swapChainSupportInfo.mCapabilities.maxImageCount << std::endl;
 
 		//如果maxImageCount为0，说明只要内存不爆炸，我们就可以设定任意数量的images
 		if (swapChainSupportInfo.mCapabilities.maxImageCount > 0 && mImageCount > swapChainSupportInfo.mCapabilities.maxImageCount) {
@@ -30,7 +33,8 @@ namespace FF::Wrapper {
 		VkSwapchainCreateInfoKHR createInfo = {};
 		createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
 		createInfo.surface = mSurface->getSurface();
-		createInfo.minImageCount = mImageCount;//我现在设置的数量，适合当前情况，但是可能会得到更多
+        //现在设置的数量，适合当前情况，但是可能会得到更多
+		createInfo.minImageCount = mImageCount;
 		createInfo.imageFormat = surfaceFormat.format;
 		createInfo.imageColorSpace = surfaceFormat.colorSpace;
 		createInfo.imageExtent = extent;
@@ -38,20 +42,18 @@ namespace FF::Wrapper {
 		//图像包含的层次，VR一般会有两个
 		createInfo.imageArrayLayers = 1;
 
-		//交换链生成的图像，到底用于何处
+		//交换链生成的图像，到底用于何处, 类比fbo的color attachment
 		createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
 		//因为交换链的图像，会被用来渲染或者显示，而渲染跟显示分别使用不同的队列，所以会出现两个队列使用同一个交换链的情况
 		//那么我们就需要设置，让交换链的图像，被两个队列使用兼容
-
 		std::vector<uint32_t> queueFamilies = { mDevice->getGraphicQueueFamily().value() , mDevice->getPresentQueueFamily().value() };
 
 		if (mDevice->getGraphicQueueFamily().value() == mDevice->getPresentQueueFamily().value()) {
 			createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;//被某一个队列族独占，性能会更好
 			createInfo.queueFamilyIndexCount = 0;
 			createInfo.pQueueFamilyIndices = nullptr;
-		}
-		else {
+		} else {
 			createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;//可以被共享的模式
 			createInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamilies.size());
 			createInfo.pQueueFamilyIndices = queueFamilies.data();
@@ -78,7 +80,6 @@ namespace FF::Wrapper {
 		//系统可能创建更多的image，当前的imageCount是最小数量
 		vkGetSwapchainImagesKHR(mDevice->getDevice(), mSwapChain, &mImageCount, nullptr);
 		mSwapChainImages.resize(mImageCount);
-
 		vkGetSwapchainImagesKHR(mDevice->getDevice(), mSwapChain, &mImageCount, mSwapChainImages.data());
 
 		//创建imageView
@@ -103,20 +104,21 @@ namespace FF::Wrapper {
 	}
 
 	SwapChainSupportInfo SwapChain::querySwapChainSupportInfo() {
-		SwapChainSupportInfo info;
-		//获取基础特性
+        //获取基础特性
+        SwapChainSupportInfo info{};
 		vkGetPhysicalDeviceSurfaceCapabilitiesKHR(mDevice->getPhysicalDevice(), mSurface->getSurface(), &info.mCapabilities);
 
-		//获取表面支持格式
+		//获取surface支持个数
 		uint32_t formatCount = 0;
 		vkGetPhysicalDeviceSurfaceFormatsKHR(mDevice->getPhysicalDevice(), mSurface->getSurface(), &formatCount, nullptr);
 
 		if (formatCount != 0) {
 			info.mFormats.resize(formatCount);
+            //获取VkSurfaceFormatKHR信息
 			vkGetPhysicalDeviceSurfaceFormatsKHR(mDevice->getPhysicalDevice(), mSurface->getSurface(), &formatCount, info.mFormats.data());
 		}
 
-		//获取呈现模式
+		//获取present模式
 		uint32_t presentModeCount = 0;
 		vkGetPhysicalDeviceSurfacePresentModesKHR(mDevice->getPhysicalDevice(), mSurface->getSurface(), &presentModeCount, nullptr);
 
@@ -134,6 +136,7 @@ namespace FF::Wrapper {
 			return {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
 		}
 
+        //否则使用首选格式
 		for (const auto& availableFormat : availableFormats) {
 			if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
 				availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
@@ -159,6 +162,7 @@ namespace FF::Wrapper {
 
 	VkExtent2D SwapChain::chooseExtent(const VkSurfaceCapabilitiesKHR& capabilities) {
 		//如果出现以下情况，说明系统不允许我们自己设定extent
+        std::cout << std::numeric_limits<uint32_t>::max() << std::endl;
 		if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
 			return capabilities.currentExtent;
 		}
