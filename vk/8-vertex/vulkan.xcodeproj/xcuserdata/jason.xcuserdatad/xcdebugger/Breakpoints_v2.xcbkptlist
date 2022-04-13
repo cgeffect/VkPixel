@@ -16,7 +16,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "123"
             endingLineNumber = "123"
-            landmarkName = "SwapChain::querySwapChainSupportInfo()"
+            landmarkName = "SwapChain::~SwapChain()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "168"
             endingLineNumber = "168"
-            landmarkName = "SwapChain::chooseExtent(capabilities)"
+            landmarkName = "SwapChain::chooseSurfaceFormat(availableFormats)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "163"
             endingLineNumber = "163"
-            landmarkName = "SwapChain::chooseExtent(capabilities)"
+            landmarkName = "SwapChain::chooseSurfaceFormat(availableFormats)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -66,10 +66,10 @@ namespace FF {
 		//设置shader
 		std::vector<Wrapper::Shader::Ptr> shaderGroup{};
 
-		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/18-vertex-wrap/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
+		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/8-vertex/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
 		shaderGroup.push_back(shaderVertex);
 
-		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/18-vertex-wrap/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
+		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/8-vertex/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
 		shaderGroup.push_back(shaderFragment);
 		
 		mPipeline->setShaderGroup(shaderGroup);
@@ -78,9 +78,10 @@ namespace FF {
 		auto vertexBindingDes = mModel->getVertexInputBindingDescriptions();
 		auto attributeDes = mModel->getAttributeDescriptions();
 
-		mPipeline->mVertexInputState.vertexBindingDescriptionCount = vertexBindingDes.size();
+        //通过buffer来设置顶点和颜色数据
+		mPipeline->mVertexInputState.vertexBindingDescriptionCount = (uint32_t)vertexBindingDes.size();
 		mPipeline->mVertexInputState.pVertexBindingDescriptions = vertexBindingDes.data();
-		mPipeline->mVertexInputState.vertexAttributeDescriptionCount = attributeDes.size();
+		mPipeline->mVertexInputState.vertexAttributeDescriptionCount = (uint32_t)attributeDes.size();
 		mPipeline->mVertexInputState.pVertexAttributeDescriptions = attributeDes.data();
 
 		//图元装配
@@ -216,10 +217,11 @@ namespace FF {
 
 			//mCommandBuffers[i]->bindVertexBuffer({ mModel->getVertexBuffer()->getBuffer() });
 
+            //绑定要传输进顶点着色器的buffer内容
 			mCommandBuffers[i]->bindVertexBuffer(mModel->getVertexBuffers());
-
+            //索引绘图的数据
 			mCommandBuffers[i]->bindIndexBuffer(mModel->getIndexBuffer()->getBuffer());
-
+            //索引绘图的索引个数
 			mCommandBuffers[i]->drawIndex(mModel->getIndexCount());
 
 			mCommandBuffers[i]->endRenderPass();

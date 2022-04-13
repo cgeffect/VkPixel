@@ -4,7 +4,7 @@
 #include "device.h"
 
 namespace FF::Wrapper {
-
+    //VAO
 	class Buffer {
 	
 	public:
