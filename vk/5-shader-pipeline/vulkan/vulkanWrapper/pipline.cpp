@@ -76,6 +76,7 @@ namespace FF::Wrapper {
 		pipelineCreateInfo.pDepthStencilState = nullptr;	//TODO: add depth and stencil
 		pipelineCreateInfo.pColorBlendState = &mBlendState;
 		pipelineCreateInfo.layout = mLayout;
+        //创建Pipeline需要renderpass, 这里填null, 所以下面的创建要注释, 因为renderpass为null, 无法创建Pipeline, 下一节会创建renderpass
 		pipelineCreateInfo.renderPass = VK_NULL_HANDLE; //TODO : add render pass
 		pipelineCreateInfo.subpass = 0;
 

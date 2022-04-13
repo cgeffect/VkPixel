@@ -16,6 +16,7 @@ namespace FF {
 	//1 rendePass 加入pipeline 2 生成FrameBuffer
 	void Application::initVulkan() {
 		mInstance = Wrapper::Instance::create(true);
+        
 		mSurface = Wrapper::WindowSurface::create(mInstance, mWindow);
 
 		mDevice = Wrapper::Device::create(mInstance, mSurface);
@@ -52,10 +53,10 @@ namespace FF {
 		//设置shader
 		std::vector<Wrapper::Shader::Ptr> shaderGroup{};
 
-		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/12-renderPass-wrap/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
+		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/6-renderPass/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
 		shaderGroup.push_back(shaderVertex);
 
-		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/12-renderPass-wrap/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
+		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/6-renderPass/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
 		shaderGroup.push_back(shaderFragment);
 		
 		mPipeline->setShaderGroup(shaderGroup);
@@ -138,13 +139,20 @@ namespace FF {
 	void Application::createRenderPass() {
 		//输入画布的描述
 		VkAttachmentDescription attachmentDes{};
+        //画布的颜色格式
 		attachmentDes.format = mSwapChain->getFormat();
+        //不需要多重采样, 设置1
 		attachmentDes.samples = VK_SAMPLE_COUNT_1_BIT;
+        //渲染之前清理画布
 		attachmentDes.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+        //渲染之后存储内容
 		attachmentDes.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+        //不关心模板数据
 		attachmentDes.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 		attachmentDes.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+        //渲染过程开始之前图像将具有的布局, VK_IMAGE_LAYOUT_UNDEFINED不能保证图像的内容被保留, 但这并不重要，因为我们自己也需要要清除画布
 		attachmentDes.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+        //渲染过程完成时自动转换到的布局, 在渲染后使用交换链准备好呈现，这就是我们使用VK_IMAGE_LAYOUT_PRESENT_SRC_KHR。
 		attachmentDes.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
 
 		mRenderPass->addAttachment(attachmentDes);
@@ -154,17 +162,21 @@ namespace FF {
 		attachmentRef.attachment = 0;
 		attachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
-		//创建子流程
+		//创建子通道
 		Wrapper::SubPass subPass{};
 		subPass.addColorAttachmentReference(attachmentRef);
 		subPass.buildSubPassDescription();
-
-		mRenderPass->addSubPass(subPass);
+		
+        mRenderPass->addSubPass(subPass);
 
 		//子流程之间的依赖关系
 		VkSubpassDependency dependency{};
+        //特殊值VK_SUBPASS_EXTERNAL是指渲染通道之前或之后的隐式子通道，具体取决于它是否在 srcSubpass或中指定dstSubpass
 		dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+        //索引0指的是我们的子通道，它是第一个也是唯一一个, dstSubpass必须始终高于以防止依赖图中的srcSubpass循环（除非子通道之一是 VK_SUBPASS_EXTERNAL）
 		dependency.dstSubpass = 0;
+        
+        //这两个字段指定要等待的操作以及这些操作发生的阶段。我们需要等待交换链完成对图像的读取，然后才能访问它。这可以通过等待颜色附件输出级本身来完成。
 		dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
 		dependency.srcAccessMask = 0;
 		dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;

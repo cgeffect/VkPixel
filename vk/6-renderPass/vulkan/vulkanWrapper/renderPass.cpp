@@ -18,6 +18,7 @@ namespace FF::Wrapper {
 		mInputAttachmentReferences.push_back(ref);
 	}
 
+    
 	void SubPass::setDepthStencilAttachmentReference(const VkAttachmentReference& ref) {
 		mDepthStencilAttachmentReference = ref;
 	}
@@ -26,18 +27,23 @@ namespace FF::Wrapper {
 		if (mColorAttachmentReferences.empty()) {
 			throw std::runtime_error("Error: color attachment group is empty!");
 		}
+        //子通道绘图
 		mSubPassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
 
+        //该数组中附件的索引是直接从片段着色器中使用layout(location = 0) out vec4 outColor指令引用的！
 		mSubPassDescription.colorAttachmentCount = static_cast<uint32_t>(mColorAttachmentReferences.size());
 		mSubPassDescription.pColorAttachments = mColorAttachmentReferences.data();
 
+        //从着色器中读取的附件
 		mSubPassDescription.inputAttachmentCount = static_cast<uint32_t>(mInputAttachmentReferences.size());
 		mSubPassDescription.pInputAttachments = mInputAttachmentReferences.data();
 
+        //深度和模板数据的附件
 		mSubPassDescription.pDepthStencilAttachment = mDepthStencilAttachmentReference.layout == VK_IMAGE_LAYOUT_UNDEFINED? nullptr : &mDepthStencilAttachmentReference;
 	}
 
 
+    //==============================================
 	RenderPass::RenderPass(const Device::Ptr& device) {
 		mDevice = device;
 	}

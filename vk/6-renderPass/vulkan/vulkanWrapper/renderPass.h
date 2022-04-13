@@ -37,6 +37,9 @@ namespace FF::Wrapper {
 		VkAttachmentReference mDepthStencilAttachmentReference{};
 	};
 
+/*
+ 在我们完成创建管道之前，我们需要告诉Vulkan渲染时将使用的帧缓冲区附件。
+ 我们需要指定将有多少颜色和深度缓冲区，为每个缓冲区使用多少样本，以及在整个渲染操作中应如何处理它们的内容。所有这些信息都包装在一个渲染通道对象中*/
 	class RenderPass {
 	public:
 		using Ptr = std::shared_ptr<RenderPass>;
