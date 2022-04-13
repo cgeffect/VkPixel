@@ -30,10 +30,7 @@ namespace FF::Wrapper {
 		}
 	}
 
-	void CommandBuffer::beginRenderPass(
-		const VkRenderPassBeginInfo& renderPassBeginInfo, 
-		const VkSubpassContents& subPassContents
-	) {
+	void CommandBuffer::beginRenderPass(const VkRenderPassBeginInfo& renderPassBeginInfo, const VkSubpassContents& subPassContents) {
 		vkCmdBeginRenderPass(mCommandBuffer, &renderPassBeginInfo, subPassContents);
 	}
 
@@ -42,7 +39,11 @@ namespace FF::Wrapper {
 	}
 
 	void CommandBuffer::draw(size_t vertexCount) {
-		vkCmdDraw(mCommandBuffer, vertexCount, 1, 0, 0);
+		vkCmdDraw(mCommandBuffer, //记录命令的命令缓冲区
+                  (uint32_t)vertexCount,//要绘制的顶点数
+                  1,//要绘制的实例数
+                  0,//要绘制的第一个顶点的索引
+                  0);//要绘制的第一个实例的实例 ID
 	}
 
 	void CommandBuffer::endRenderPass() {

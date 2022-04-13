@@ -30,10 +30,12 @@ namespace FF {
 		mPipeline = Wrapper::Pipeline::create(mDevice, mRenderPass);
 		createPipeline();
 
+        //创建命令缓冲池
 		mCommandPool = Wrapper::CommandPool::create(mDevice);
 
 		mCommandBuffers.resize(mSwapChain->getImageCount());
 
+        //从命令缓冲池里创建命令缓冲
 		for (int i = 0; i < mSwapChain->getImageCount(); ++i) {
 			mCommandBuffers[i] = Wrapper::CommandBuffer::create(mDevice, mCommandPool);
 
@@ -41,18 +43,18 @@ namespace FF {
 
 			VkRenderPassBeginInfo renderBeginInfo{};
 			renderBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-			renderBeginInfo.renderPass = mRenderPass->getRenderPass();
-			renderBeginInfo.framebuffer = mSwapChain->getFrameBuffer(i);
-			renderBeginInfo.renderArea.offset = {0, 0};
-			renderBeginInfo.renderArea.extent = mSwapChain->getExtent();
+			renderBeginInfo.renderPass = mRenderPass->getRenderPass(); //指定使用哪个renderpass渲染
+			renderBeginInfo.framebuffer = mSwapChain->getFrameBuffer(i);//指定用哪个fbo
+			renderBeginInfo.renderArea.offset = {0, 0};//渲染的起始点
+			renderBeginInfo.renderArea.extent = mSwapChain->getExtent();//渲染的宽高
 
-			VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
+            VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 0.0f }; //清屏颜色和深度值
 			renderBeginInfo.clearValueCount = 1;
 			renderBeginInfo.pClearValues = &clearColor;
 
-
 			mCommandBuffers[i]->beginRenderPass(renderBeginInfo);
 
+            //把渲染管道和渲染命令绑定
 			mCommandBuffers[i]->bindGraphicPipeline(mPipeline->getPipeline());
 
 			mCommandBuffers[i]->draw(3);
@@ -95,10 +97,10 @@ namespace FF {
 		//设置shader
 		std::vector<Wrapper::Shader::Ptr> shaderGroup{};
 
-		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/14-command-wrap/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
+		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/7-command/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
 		shaderGroup.push_back(shaderVertex);
 
-		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/14-command-wrap/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
+		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/7-command/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
 		shaderGroup.push_back(shaderFragment);
 		
 		mPipeline->setShaderGroup(shaderGroup);
@@ -235,13 +237,12 @@ namespace FF {
 
 		//获取交换链当中的下一帧
 		uint32_t imageIndex{ 0 };
-		vkAcquireNextImageKHR(
-			mDevice->getDevice(),
-			mSwapChain->getSwapChain(),
-			UINT64_MAX,
-			mImageAvailableSemaphores[mCurrentFrame]->getSemaphore(),
-			VK_NULL_HANDLE,
-			&imageIndex);
+		vkAcquireNextImageKHR(mDevice->getDevice(), //与swapChain关联的device
+                              mSwapChain->getSwapChain(),//要从哪个swapChain获取image
+                              UINT64_MAX,//如果没有可用的图像，指定函数等待的时间（以纳秒为单位）
+                              mImageAvailableSemaphores[mCurrentFrame]->getSemaphore(), //为VK_NULL_HANDLE或者使用信号量
+                              VK_NULL_HANDLE, //为VK_NULL_HANDLE或者使用fence
+                              &imageIndex); //返回可使用的image索引
 
 		//构建提交信息
 		VkSubmitInfo submitInfo{};
@@ -266,6 +267,7 @@ namespace FF {
 		submitInfo.pSignalSemaphores = signalSemaphores;
 
 		mFences[mCurrentFrame]->resetFence();
+        //在vkQueueSubmit/vkQueueBindSparse的时候，可以附加带上一个Fence对象。之后就可以使用这个对象来查询之前操作是否完成
 		if (vkQueueSubmit(mDevice->getGraphicQueue(), 1, &submitInfo, mFences[mCurrentFrame]->getFence()) != VK_SUCCESS) {
 			throw std::runtime_error("Error:failed to submit renderCommand");
 		}
@@ -273,15 +275,17 @@ namespace FF {
 		VkPresentInfoKHR presentInfo{};
 		presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
-		presentInfo.waitSemaphoreCount = 1;
-		presentInfo.pWaitSemaphores = signalSemaphores;
+		presentInfo.waitSemaphoreCount = 1; //发出当前请求之前要等待的信号量数。该数字可能为零。
+		presentInfo.pWaitSemaphores = signalSemaphores;//发出当前请求之前要等待的信号量。
 
 		VkSwapchainKHR swapChains[] = {mSwapChain->getSwapChain()};
-		presentInfo.swapchainCount = 1;
-		presentInfo.pSwapchains = swapChains;
+		presentInfo.swapchainCount = 1;//提供给的交换链的数量
+		presentInfo.pSwapchains = swapChains;//交换链数组指针
 
+        //swapChain中的第几帧
 		presentInfo.pImageIndices = &imageIndex;
 
+        //在对所有渲染命令进行排队并将图像转换为正确的布局后，将图像排队以进行显示
 		vkQueuePresentKHR(mDevice->getPresentQueue(), &presentInfo);
 
 		mCurrentFrame = (mCurrentFrame + 1) % mSwapChain->getImageCount();
