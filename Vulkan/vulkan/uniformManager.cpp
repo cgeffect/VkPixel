@@ -8,9 +8,9 @@ UniformManager::~UniformManager() {
 
 }
 
-void UniformManager::init(const Wrapper::Device::Ptr& device, int frameCount) {
-    
-    //创建两个uniform信息
+void UniformManager::init(const Wrapper::Device::Ptr& device, const Wrapper::CommandPool::Ptr& commandPool, int frameCount) {
+	mDevice = device;
+
 	auto vpParam = Wrapper::UniformParameter::create();
 	vpParam->mBinding = 0;
 	vpParam->mCount = 1;
@@ -18,7 +18,6 @@ void UniformManager::init(const Wrapper::Device::Ptr& device, int frameCount) {
 	vpParam->mSize = sizeof(VPMatrices);
 	vpParam->mStage = VK_SHADER_STAGE_VERTEX_BIT;
 	
-    //创建存储uniform的buffer
 	for (int i = 0; i < frameCount; ++i) {
 		auto buffer = Wrapper::Buffer::createUniformBuffer(device, vpParam->mSize, nullptr);
 		vpParam->mBuffers.push_back(buffer);
@@ -40,14 +39,21 @@ void UniformManager::init(const Wrapper::Device::Ptr& device, int frameCount) {
 
 	mUniformParams.push_back(objectParam);
 
-    //创建VkDescriptorSetLayout,mBinding表示layout(binding = 0) 的位置, 会通过VkDescriptorSetLayout和VkWriteDescriptorSet共同指定
+	auto textureParam = Wrapper::UniformParameter::create();
+	textureParam->mBinding = 2;
+	textureParam->mCount = 1;
+	textureParam->mDescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	textureParam->mStage = VK_SHADER_STAGE_FRAGMENT_BIT;
+	textureParam->mTexture = Texture::create(mDevice, commandPool, "/Users/jason/Jason/project/vulkan-tutorial/Vulkan/vulkan/assets/bgra.jpg");
+
+	mUniformParams.push_back(textureParam);
+
 	mDescriptorSetLayout = Wrapper::DescriptorSetLayout::create(device);
 	mDescriptorSetLayout->build(mUniformParams);
 
 	mDescriptorPool = Wrapper::DescriptorPool::create(device);
 	mDescriptorPool->build(mUniformParams, frameCount);
 
-    //通过VkDescriptorSetLayout和VkDescriptorPool创建mVkDescriptorSet
 	mDescriptorSet = Wrapper::DescriptorSet::create(device, mUniformParams, mDescriptorSetLayout, mDescriptorPool, frameCount);
 
 }
