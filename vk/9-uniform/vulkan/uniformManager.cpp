@@ -43,6 +43,7 @@ void UniformManager::init(const Wrapper::Device::Ptr& device, int frameCount) {
 	mDescriptorPool = Wrapper::DescriptorPool::create(device);
 	mDescriptorPool->build(mUniformParams, frameCount);
 
+    //通过VkDescriptorSetLayout和VkDescriptorPool创建mVkDescriptorSet
 	mDescriptorSet = Wrapper::DescriptorSet::create(device, mUniformParams, mDescriptorSetLayout, mDescriptorPool, frameCount);
 
 }

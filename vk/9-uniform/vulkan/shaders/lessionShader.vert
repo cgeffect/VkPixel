@@ -12,6 +12,7 @@ layout(binding = 0) uniform VPMatrices {
 	mat4 mProjectionMatrix;
 }vpUBO;
 
+//将统一缓冲区内容映射到objectUBO结构。未指定“set=M”，默认为 0。
 layout(binding = 1) uniform ObjectUniform {
 	mat4 mModelMatrix;
 }objectUBO;

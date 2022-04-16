@@ -2,13 +2,11 @@
 
 namespace FF::Wrapper {
 
-	DescriptorSet::DescriptorSet(
-		const Device::Ptr& device,
-		const std::vector<UniformParameter::Ptr> params,
-		const DescriptorSetLayout::Ptr& layout,
-		const DescriptorPool::Ptr& pool,
-		int frameCount
-	) {
+	DescriptorSet::DescriptorSet(const Device::Ptr& device,		
+                                 const std::vector<UniformParameter::Ptr> params,
+                                 const DescriptorSetLayout::Ptr& layout,
+                                 const DescriptorPool::Ptr& pool,
+                                 int frameCount) {
 		mDevice = device;
 
 		std::vector<VkDescriptorSetLayout> layouts(frameCount, layout->getLayout());

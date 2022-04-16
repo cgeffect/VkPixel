@@ -60,11 +60,11 @@ namespace FF::Wrapper {
 	}
 
 	void CommandBuffer::draw(size_t vertexCount) {
-		vkCmdDraw(mCommandBuffer, vertexCount, 1, 0, 0);
+		vkCmdDraw(mCommandBuffer, (uint32_t)vertexCount, 1, 0, 0);
 	}
 
 	void CommandBuffer::drawIndex(size_t indexCount) {
-		vkCmdDrawIndexed(mCommandBuffer, indexCount, 1, 0, 0, 0);
+		vkCmdDrawIndexed(mCommandBuffer, (uint32_t)indexCount, 1, 0, 0, 0);
 	}
 
 	void CommandBuffer::endRenderPass() {

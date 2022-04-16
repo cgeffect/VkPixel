@@ -1,4 +1,5 @@
 #include "application.h"
+//#include <gtx/string_cast.hpp>
 
 namespace FF {
 
@@ -15,6 +16,7 @@ namespace FF {
 
 	void Application::initVulkan() {
 		mInstance = Wrapper::Instance::create(true);
+        
 		mSurface = Wrapper::WindowSurface::create(mInstance, mWindow);
 
 		mDevice = Wrapper::Device::create(mInstance, mSurface);
@@ -27,8 +29,6 @@ namespace FF {
 		createRenderPass();
 
 		mSwapChain->createFrameBuffers(mRenderPass);
-
-		
 
 		//descriptor ===========================
 		mUniformManager = UniformManager::create();
@@ -47,7 +47,6 @@ namespace FF {
 		createCommandBuffers();
 
 		createSyncObjects();
-		
 
 	}
 
@@ -72,10 +71,10 @@ namespace FF {
 		//设置shader
 		std::vector<Wrapper::Shader::Ptr> shaderGroup{};
 
-		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/19-uniform-wrap/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
+		auto shaderVertex = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/9-uniform/vulkan/shaders/vs.spv", VK_SHADER_STAGE_VERTEX_BIT, "main");
 		shaderGroup.push_back(shaderVertex);
 
-		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/19-uniform-wrap/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
+		auto shaderFragment = Wrapper::Shader::create(mDevice, "/Users/jason/Jason/project/vulkan-tutorial/vk/9-uniform/vulkan/shaders/fs.spv", VK_SHADER_STAGE_FRAGMENT_BIT, "main");
 		shaderGroup.push_back(shaderFragment);
 		
 		mPipeline->setShaderGroup(shaderGroup);
@@ -84,9 +83,9 @@ namespace FF {
 		auto vertexBindingDes = mModel->getVertexInputBindingDescriptions();
 		auto attributeDes = mModel->getAttributeDescriptions();
 
-		mPipeline->mVertexInputState.vertexBindingDescriptionCount = vertexBindingDes.size();
+		mPipeline->mVertexInputState.vertexBindingDescriptionCount = (uint32_t)vertexBindingDes.size();
 		mPipeline->mVertexInputState.pVertexBindingDescriptions = vertexBindingDes.data();
-		mPipeline->mVertexInputState.vertexAttributeDescriptionCount = attributeDes.size();
+		mPipeline->mVertexInputState.vertexAttributeDescriptionCount = (uint32_t)attributeDes.size();
 		mPipeline->mVertexInputState.pVertexAttributeDescriptions = attributeDes.data();
 
 		//图元装配
@@ -149,12 +148,19 @@ namespace FF {
 		mPipeline->mBlendState.blendConstants[2] = 0.0f;
 		mPipeline->mBlendState.blendConstants[3] = 0.0f;
 
-		//uniform的传递
-		mPipeline->mLayoutState.setLayoutCount = 1;
-
+        /*layout (set=M, binding=N) uniform sampler2D variableNameArray[I];
+         M指pSetLayouts管道布局成员中的第 M' 个描述符集布局
+         N指的pBindings是描述符集布局的M的成员中的第N个描述符集（绑定）
+         I 是 N 的描述符集中描述符数组的索引
+        */
+		//uniform的传递, 在创建管线是由VkPipelineLayout对象指定
+		mPipeline->mLayoutState.setLayoutCount = 1; //Pipeline Layout中 描述集的数量
 		auto layout = mUniformManager->getDescriptorLayout()->getLayout();
-		mPipeline->mLayoutState.pSetLayouts = &layout;
-		mPipeline->mLayoutState.pushConstantRangeCount = 0;
+		mPipeline->mLayoutState.pSetLayouts = &layout; //指向对象数组的指针 VkDescriptorSetLayout
+		mPipeline->mLayoutState.pushConstantRangeCount = 0;//Pipeline Layout中包含的推送常量范围的数量
+        //指向结构数组的指针，该数组VkPushConstantRange定义了一组用于单个管道布局的推送常量范围。除了描述符集布局之外，
+        //管道布局还描述了管道的每个阶段可以访问多少个推送常量。
+        //推送常量表示修改管道中常量数据的高速路径，预计其性能优于内存支持的资源更新。
 		mPipeline->mLayoutState.pPushConstantRanges = nullptr;
 
 		mPipeline->build();
@@ -297,9 +303,23 @@ namespace FF {
 		while (!mWindow->shouldClose()) {
 			mWindow->pollEvents();
 
-			mModel->update();
+            //更新矩阵信息
+			mModel->updateMVP();
 
-			mUniformManager->update(mVPMatrices, mModel->getUniform(), mCurrentFrame);
+//            glm::mat4 mModelMatrix = mModel->getUniform().mModelMatrix;
+//            for (int i = 0; i<4; i++) {
+//                for (int j = 0; j<4; j++) {
+//                    printf("%.1f, ",mModelMatrix[i][j]);
+//                }
+//                printf("\n");
+//            }
+
+            //把矩阵信息更新到buffer
+            mUniformManager->update(mVPMatrices, mModel->getUniform(), mCurrentFrame);
+//            std::cout << &mVPMatrices << std::endl;
+
+//            glm::vec4 v4 = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);//创建一个vec4
+//            printf("x : %.1f, y : %.1f, z : %.1f, w : %.1f", v4.x, v4.y, v4.z, v4.w); //向量的w分量也叫齐次坐标
 
 			render();
 		}
@@ -314,12 +334,12 @@ namespace FF {
 		//获取交换链当中的下一帧
 		uint32_t imageIndex{ 0 };
 		VkResult result = vkAcquireNextImageKHR(
-			mDevice->getDevice(),
-			mSwapChain->getSwapChain(),
-			UINT64_MAX,
-			mImageAvailableSemaphores[mCurrentFrame]->getSemaphore(),
-			VK_NULL_HANDLE,
-			&imageIndex);
+                                                mDevice->getDevice(),
+                                                mSwapChain->getSwapChain(),
+                                                UINT64_MAX,
+                                                mImageAvailableSemaphores[mCurrentFrame]->getSemaphore(),
+                                                VK_NULL_HANDLE,
+                                                &imageIndex);
 
 		//窗体发生了尺寸变化
 		if (result == VK_ERROR_OUT_OF_DATE_KHR) {
@@ -384,13 +404,9 @@ namespace FF {
 	}
 
 	void Application::cleanUp() {
-
 		mPipeline.reset();
-
 		mRenderPass.reset();
-
 		mSwapChain.reset();
-
 		mDevice.reset();
 		mSurface.reset();
 		mInstance.reset();
