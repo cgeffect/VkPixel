@@ -1,9 +1,9 @@
 #pragma once
 
 #include "../base.h"
-#include "../vulkanWrapper/image.h"
-#include "../vulkanWrapper/sampler.h"
-#include "../vulkanWrapper/device.h"
+#include "../vulkanWrapper/vkImage/image.h"
+#include "../vulkanWrapper/vkImage/sampler.h"
+#include "../vulkanWrapper/device/device.h"
 #include "../vulkanWrapper/commandPool.h"
 
 namespace FF {

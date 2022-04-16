@@ -140,6 +140,68 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		961D32F5280ACA6900D6AC8F /* vkImage */ = {
+			isa = PBXGroup;
+			children = (
+				96687E5A2802CE7200DCF281 /* sampler.cpp */,
+				96687E502802CE7200DCF281 /* sampler.h */,
+				96687E4D2802CE7200DCF281 /* image.cpp */,
+				96687E6A2802CE7200DCF281 /* image.h */,
+				96687E5E2802CE7200DCF281 /* shader.cpp */,
+				96687E4A2802CE7200DCF281 /* shader.h */,
+			);
+			path = vkImage;
+			sourceTree = "<group>";
+		};
+		961D32F6280ACBB000D6AC8F /* semaphore */ = {
+			isa = PBXGroup;
+			children = (
+				96687E692802CE7200DCF281 /* semaphore.cpp */,
+				96687E462802CE7200DCF281 /* semaphore.h */,
+				96687E682802CE7200DCF281 /* fence.cpp */,
+				96687E4B2802CE7200DCF281 /* fence.h */,
+			);
+			path = semaphore;
+			sourceTree = "<group>";
+		};
+		961D32F7280ACC1300D6AC8F /* device */ = {
+			isa = PBXGroup;
+			children = (
+				96687E572802CE7200DCF281 /* device.cpp */,
+				96687E492802CE7200DCF281 /* device.h */,
+				96687E672802CE7200DCF281 /* instance.cpp */,
+				96687E652802CE7200DCF281 /* instance.h */,
+			);
+			path = device;
+			sourceTree = "<group>";
+		};
+		961D32F8280ACCC900D6AC8F /* uniform */ = {
+			isa = PBXGroup;
+			children = (
+				96687E6C2802CE7200DCF281 /* uniformManager.cpp */,
+				96687E312802CE7200DCF281 /* uniformManager.h */,
+				96687E632802CE7200DCF281 /* description.h */,
+				96687E562802CE7200DCF281 /* descriptorPool.cpp */,
+				96687E4F2802CE7200DCF281 /* descriptorPool.h */,
+				96687E5D2802CE7200DCF281 /* descriptorSet.cpp */,
+				96687E662802CE7200DCF281 /* descriptorSet.h */,
+				96687E582802CE7200DCF281 /* descriptorSetLayout.cpp */,
+				96687E612802CE7200DCF281 /* descriptorSetLayout.h */,
+			);
+			path = uniform;
+			sourceTree = "<group>";
+		};
+		961D32F9280ACDFA00D6AC8F /* window */ = {
+			isa = PBXGroup;
+			children = (
+				96687E512802CE7200DCF281 /* window.cpp */,
+				96687E552802CE7200DCF281 /* window.h */,
+				96687E472802CE7200DCF281 /* windowSurface.cpp */,
+				96687E592802CE7200DCF281 /* windowSurface.h */,
+			);
+			path = window;
+			sourceTree = "<group>";
+		};
 		96687E322802CE7200DCF281 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +236,11 @@
 		96687E452802CE7200DCF281 /* vulkanWrapper */ = {
 			isa = PBXGroup;
 			children = (
+				961D32F9280ACDFA00D6AC8F /* window */,
+				961D32F8280ACCC900D6AC8F /* uniform */,
+				961D32F7280ACC1300D6AC8F /* device */,
+				961D32F6280ACBB000D6AC8F /* semaphore */,
+				961D32F5280ACA6900D6AC8F /* vkImage */,
 				96687E5F2802CE7200DCF281 /* buffer.cpp */,
 				96687E622802CE7200DCF281 /* buffer.h */,
 				96687E4C2802CE7200DCF281 /* CMakeLists.txt */,
@@ -181,37 +248,12 @@
 				96687E5C2802CE7200DCF281 /* commandBuffer.h */,
 				96687E522802CE7200DCF281 /* commandPool.cpp */,
 				96687E4E2802CE7200DCF281 /* commandPool.h */,
-				96687E632802CE7200DCF281 /* description.h */,
-				96687E562802CE7200DCF281 /* descriptorPool.cpp */,
-				96687E4F2802CE7200DCF281 /* descriptorPool.h */,
-				96687E5D2802CE7200DCF281 /* descriptorSet.cpp */,
-				96687E662802CE7200DCF281 /* descriptorSet.h */,
-				96687E582802CE7200DCF281 /* descriptorSetLayout.cpp */,
-				96687E612802CE7200DCF281 /* descriptorSetLayout.h */,
-				96687E572802CE7200DCF281 /* device.cpp */,
-				96687E492802CE7200DCF281 /* device.h */,
-				96687E682802CE7200DCF281 /* fence.cpp */,
-				96687E4B2802CE7200DCF281 /* fence.h */,
-				96687E4D2802CE7200DCF281 /* image.cpp */,
-				96687E6A2802CE7200DCF281 /* image.h */,
-				96687E672802CE7200DCF281 /* instance.cpp */,
-				96687E652802CE7200DCF281 /* instance.h */,
 				96687E5B2802CE7200DCF281 /* pipeline.cpp */,
 				96687E642802CE7200DCF281 /* pipeline.h */,
 				96687E542802CE7200DCF281 /* renderPass.cpp */,
 				96687E482802CE7200DCF281 /* renderPass.h */,
-				96687E5A2802CE7200DCF281 /* sampler.cpp */,
-				96687E502802CE7200DCF281 /* sampler.h */,
-				96687E692802CE7200DCF281 /* semaphore.cpp */,
-				96687E462802CE7200DCF281 /* semaphore.h */,
-				96687E5E2802CE7200DCF281 /* shader.cpp */,
-				96687E4A2802CE7200DCF281 /* shader.h */,
 				96687E602802CE7200DCF281 /* swapChain.cpp */,
 				96687E532802CE7200DCF281 /* swapChain.h */,
-				96687E512802CE7200DCF281 /* window.cpp */,
-				96687E552802CE7200DCF281 /* window.h */,
-				96687E472802CE7200DCF281 /* windowSurface.cpp */,
-				96687E592802CE7200DCF281 /* windowSurface.h */,
 			);
 			path = vulkanWrapper;
 			sourceTree = "<group>";
@@ -246,8 +288,6 @@
 				96687E322802CE7200DCF281 /* shaders */,
 				96687E432802CE7200DCF281 /* stb_image.h */,
 				96687E392802CE7200DCF281 /* texture */,
-				96687E6C2802CE7200DCF281 /* uniformManager.cpp */,
-				96687E312802CE7200DCF281 /* uniformManager.h */,
 				96687E452802CE7200DCF281 /* vulkanWrapper */,
 			);
 			path = vulkan;

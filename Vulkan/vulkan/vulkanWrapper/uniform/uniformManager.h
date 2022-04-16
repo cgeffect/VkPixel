@@ -1,12 +1,12 @@
 #pragma once
 
-#include "vulkanWrapper/buffer.h"
-#include "vulkanWrapper/descriptorSetLayout.h"
-#include "vulkanWrapper/descriptorPool.h"
-#include "vulkanWrapper/descriptorSet.h"
-#include "vulkanWrapper/description.h"
-#include "vulkanWrapper/device.h"
-#include "vulkanWrapper/commandPool.h"
+#include "../../vulkanWrapper/buffer.h"
+#include "descriptorSetLayout.h"
+#include "descriptorPool.h"
+#include "descriptorSet.h"
+#include "description.h"
+#include "../../vulkanWrapper/device/device.h"
+#include "../commandPool.h"
 #include "base.h"
 
 using namespace FF;

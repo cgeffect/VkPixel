@@ -1,9 +1,9 @@
 #pragma once
 #include "base.h"
 #include "vulkanWrapper/buffer.h"
-#include "vulkanWrapper/device.h"
-#include "vulkanWrapper/descriptorSet.h"
-#include "vulkanWrapper/description.h"
+#include "vulkanWrapper/device/device.h"
+#include "vulkanWrapper/uniform/descriptorSet.h"
+#include "vulkanWrapper/uniform/description.h"
 
 namespace FF {
 
