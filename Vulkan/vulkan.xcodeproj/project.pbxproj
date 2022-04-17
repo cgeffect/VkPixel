@@ -140,19 +140,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		961D32F5280ACA6900D6AC8F /* vkImage */ = {
-			isa = PBXGroup;
-			children = (
-				96687E5A2802CE7200DCF281 /* sampler.cpp */,
-				96687E502802CE7200DCF281 /* sampler.h */,
-				96687E4D2802CE7200DCF281 /* image.cpp */,
-				96687E6A2802CE7200DCF281 /* image.h */,
-				96687E5E2802CE7200DCF281 /* shader.cpp */,
-				96687E4A2802CE7200DCF281 /* shader.h */,
-			);
-			path = vkImage;
-			sourceTree = "<group>";
-		};
 		961D32F6280ACBB000D6AC8F /* semaphore */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +207,12 @@
 				96687E3A2802CE7200DCF281 /* CMakeLists.txt */,
 				96687E3B2802CE7200DCF281 /* texture.cpp */,
 				96687E3C2802CE7200DCF281 /* texture.h */,
+				96687E5A2802CE7200DCF281 /* sampler.cpp */,
+				96687E502802CE7200DCF281 /* sampler.h */,
+				96687E4D2802CE7200DCF281 /* image.cpp */,
+				96687E6A2802CE7200DCF281 /* image.h */,
+				96687E5E2802CE7200DCF281 /* shader.cpp */,
+				96687E4A2802CE7200DCF281 /* shader.h */,
 			);
 			path = texture;
 			sourceTree = "<group>";
@@ -240,7 +233,6 @@
 				961D32F8280ACCC900D6AC8F /* uniform */,
 				961D32F7280ACC1300D6AC8F /* device */,
 				961D32F6280ACBB000D6AC8F /* semaphore */,
-				961D32F5280ACA6900D6AC8F /* vkImage */,
 				96687E5F2802CE7200DCF281 /* buffer.cpp */,
 				96687E622802CE7200DCF281 /* buffer.h */,
 				96687E4C2802CE7200DCF281 /* CMakeLists.txt */,

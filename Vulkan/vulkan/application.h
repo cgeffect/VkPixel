@@ -6,7 +6,7 @@
 #include "vulkanWrapper/window/window.h"
 #include "vulkanWrapper/window/windowSurface.h"
 #include "vulkanWrapper/swapChain.h"
-#include "vulkanWrapper/vkImage/shader.h"
+#include "texture/shader.h"
 #include "vulkanWrapper/pipeline.h"
 #include "vulkanWrapper/renderPass.h"
 #include "vulkanWrapper/commandPool.h"

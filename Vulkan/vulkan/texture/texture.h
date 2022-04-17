@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../base.h"
-#include "../vulkanWrapper/vkImage/image.h"
-#include "../vulkanWrapper/vkImage/sampler.h"
+#include "../texture/image.h"
+#include "../texture/sampler.h"
 #include "../vulkanWrapper/device/device.h"
 #include "../vulkanWrapper/commandPool.h"
 

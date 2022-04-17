@@ -1,7 +1,8 @@
 #include "swapChain.h"
 
 namespace FF::Wrapper {
-
+    
+    //
 	SwapChain::SwapChain(const Device::Ptr& device, const Window::Ptr& window, const WindowSurface::Ptr& surface) {
 		mDevice = device;
 		mWindow = window;
