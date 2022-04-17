@@ -8,8 +8,8 @@
 
 namespace FF::Wrapper {
 
-    //swapChain ==> render buffer
-	struct SwapChainSupportInfo {
+    //swapChain就是前后缓冲区
+    struct SwapChainSupportInfo {
 		VkSurfaceCapabilitiesKHR mCapabilities;
 		std::vector<VkSurfaceFormatKHR> mFormats;
 		std::vector<VkPresentModeKHR> mPresentModes;
