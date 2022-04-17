@@ -40,8 +40,6 @@ namespace FF {
 		mPipeline = Wrapper::Pipeline::create(mDevice, mRenderPass);
 		createPipeline();
 
-		
-
 		mCommandBuffers.resize(mSwapChain->getImageCount());
 		
 		createCommandBuffers();
@@ -296,8 +294,10 @@ namespace FF {
 		while (!mWindow->shouldClose()) {
 			mWindow->pollEvents();
 
+            //更新旋转信息
 			mModel->update();
 
+            //更新uniform数据到着色器
 			mUniformManager->update(mVPMatrices, mModel->getUniform(), mCurrentFrame);
 
 			render();

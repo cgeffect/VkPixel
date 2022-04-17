@@ -2,12 +2,12 @@
 
 namespace FF::Wrapper {
     
-    //
 	SwapChain::SwapChain(const Device::Ptr& device, const Window::Ptr& window, const WindowSurface::Ptr& surface) {
 		mDevice = device;
 		mWindow = window;
 		mSurface = surface;
 
+        //SwapChainSupportInfo
 		auto swapChainSupportInfo = querySwapChainSupportInfo();
 
 		//选择vkformat
@@ -44,7 +44,6 @@ namespace FF::Wrapper {
 
 		//因为交换链的图像，会被用来渲染或者显示，而渲染跟显示分别使用不同的队列，所以会出现两个队列使用同一个交换链的情况
 		//那么我们就需要设置，让交换链的图像，被两个队列使用兼容
-
 		std::vector<uint32_t> queueFamilies = { mDevice->getGraphicQueueFamily().value() , mDevice->getPresentQueueFamily().value() };
 
 		if (mDevice->getGraphicQueueFamily().value() == mDevice->getPresentQueueFamily().value()) {
@@ -162,6 +161,7 @@ namespace FF::Wrapper {
 			return {VK_FORMAT_B8G8R8A8_SRGB, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
 		}
 
+        //否则使用首选格式
 		for (const auto& availableFormat : availableFormats) {
 			if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
 				availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {

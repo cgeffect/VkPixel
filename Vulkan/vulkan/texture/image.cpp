@@ -165,10 +165,12 @@ namespace FF::Wrapper {
 		assert(pData);
 		assert(size);
 
+        //把pData包装成VkBuffer
 		auto stageBuffer = Buffer::createStageBuffer(mDevice, size, pData);
 
 		auto commandBuffer = CommandBuffer::create(mDevice, commandPool);
 		commandBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+        //再把VkBuffer包装成VkImage
 		commandBuffer->copyBufferToImage(stageBuffer->getBuffer(), mImage, mLayout, (uint32_t)mWidth, (uint32_t)mHeight);
 		commandBuffer->end();
 

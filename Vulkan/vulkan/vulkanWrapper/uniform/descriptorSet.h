@@ -33,13 +33,11 @@ namespace FF::Wrapper {
 				); 
 		}
 
-		DescriptorSet(
-			const Device::Ptr &device,
-			const std::vector<UniformParameter::Ptr> params,
-			const DescriptorSetLayout::Ptr &layout,
-			const DescriptorPool::Ptr &pool,
-			int frameCount
-		);
+		DescriptorSet(const Device::Ptr &device,
+                      const std::vector<UniformParameter::Ptr> params,
+                      const DescriptorSetLayout::Ptr &layout,
+                      const DescriptorPool::Ptr &pool,
+                      int frameCount);
 
 		~DescriptorSet();
 
