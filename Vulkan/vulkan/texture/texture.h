@@ -8,6 +8,7 @@
 
 namespace FF {
 
+    //texture包含vkimage和vksample
 	class Texture {
 	public:
 		using Ptr = std::shared_ptr<Texture>;
@@ -29,6 +30,7 @@ namespace FF {
 		Wrapper::Device::Ptr mDevice{ nullptr };
 		Wrapper::Image::Ptr mImage{ nullptr };
 		Wrapper::Sampler::Ptr mSampler{ nullptr };
+        //纹理描述符
 		VkDescriptorImageInfo mImageInfo{};
 	};
 

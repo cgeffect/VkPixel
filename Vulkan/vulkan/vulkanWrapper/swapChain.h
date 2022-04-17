@@ -8,6 +8,7 @@
 
 namespace FF::Wrapper {
 
+    //swapChain ==> render buffer
 	struct SwapChainSupportInfo {
 		VkSurfaceCapabilitiesKHR mCapabilities;
 		std::vector<VkSurfaceFormatKHR> mFormats;

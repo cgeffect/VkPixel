@@ -19,9 +19,6 @@
 #include "vulkanWrapper/uniform/descriptorSet.h"
 #include "vulkanWrapper/uniform/description.h"
 #include "uniformManager.h"
-#include "vulkanWrapper/vkImage/image.h"
-#include "vulkanWrapper/vkImage/sampler.h"
-#include "texture/texture.h"
 
 #include "model.h"
 

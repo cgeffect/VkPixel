@@ -49,7 +49,6 @@ namespace FF {
 		createCommandBuffers();
 
 		createSyncObjects();
-
 		
 	}
 
@@ -57,7 +56,7 @@ namespace FF {
 		//设置视口
 		VkViewport viewport = {};
 		viewport.x = 0.0f;
-		viewport.y = (float)mHeight;
+		viewport.y = (float)mHeight; //y轴向上
 		viewport.width = (float)mWidth;
 		viewport.height = -(float)mHeight;
 		viewport.minDepth = 0.0f;

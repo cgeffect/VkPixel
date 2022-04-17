@@ -128,7 +128,7 @@ namespace FF::Wrapper {
 
 		//填写逻辑设备创建信息
 		VkPhysicalDeviceFeatures deviceFeatures = {};
-		deviceFeatures.samplerAnisotropy = VK_TRUE;
+		deviceFeatures.samplerAnisotropy = VK_TRUE; //各向异性
 
 		VkDeviceCreateInfo deviceCreateInfo = {};
 		deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;

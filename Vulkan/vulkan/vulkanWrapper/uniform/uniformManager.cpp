@@ -39,13 +39,14 @@ void UniformManager::init(const Wrapper::Device::Ptr& device, const Wrapper::Com
 
 	mUniformParams.push_back(objectParam);
 
+    //绑定采样器
 	auto textureParam = Wrapper::UniformParameter::create();
+    //layout(binding = 2) uniform sampler2D texSampler;
 	textureParam->mBinding = 2;
 	textureParam->mCount = 1;
 	textureParam->mDescriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	textureParam->mStage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	textureParam->mTexture = Texture::create(mDevice, commandPool, "/Users/jason/Jason/project/vulkan-tutorial/Vulkan/vulkan/assets/bgra.jpg");
-
 	mUniformParams.push_back(textureParam);
 
 	mDescriptorSetLayout = Wrapper::DescriptorSetLayout::create(device);

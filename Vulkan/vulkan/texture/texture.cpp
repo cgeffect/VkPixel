@@ -37,6 +37,7 @@ namespace FF {
 		region.baseMipLevel = 0;
 		region.levelCount = 1;
 
+        //转换为VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL格式
 		mImage->setImageLayout(
 			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 			VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -47,6 +48,7 @@ namespace FF {
 
 		mImage->fillImageData(texSize, (void*)pixels, commandPool);
 
+        //转换VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL格式
 		mImage->setImageLayout(
 			VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			VK_PIPELINE_STAGE_TRANSFER_BIT,

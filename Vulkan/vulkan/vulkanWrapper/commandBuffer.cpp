@@ -85,16 +85,16 @@ namespace FF::Wrapper {
 		VkBufferImageCopy region{};
 		region.bufferOffset = 0;
 
-		//为0代表不需要进行padding
+		//为0代表不需要进行padding(内存对齐)
 		region.bufferRowLength = 0;
 		region.bufferImageHeight = 0;
 
 		region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-		region.imageSubresource.mipLevel = 0;
-		region.imageSubresource.baseArrayLayer = 0;
-		region.imageSubresource.layerCount = 1;
-		region.imageOffset = {0, 0, 0};
-		region.imageExtent = {width, height, 1};
+		region.imageSubresource.mipLevel = 0; //只有一个mipLevel层
+		region.imageSubresource.baseArrayLayer = 0;//0号layer
+		region.imageSubresource.layerCount = 1; //只有一个layer
+		region.imageOffset = {0, 0, 0}; //读取偏移量
+		region.imageExtent = {width, height, 1}; //宽高深
 
 		vkCmdCopyBufferToImage(mCommandBuffer, srcBuffer, dstImage, dstImageLayout, 1, &region);
 	}
@@ -111,14 +111,12 @@ namespace FF::Wrapper {
 	}
 
 	void CommandBuffer::transferImageLayout(const VkImageMemoryBarrier &imageMemoryBarrier, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) {
-		vkCmdPipelineBarrier(
-			mCommandBuffer, 
-			srcStageMask, 
-			dstStageMask, 
-			0, 
-			0, nullptr,//MemoryBarrier
-			0, nullptr, //BufferMemoryBarrier
-			1, &imageMemoryBarrier
-			);
+		vkCmdPipelineBarrier(mCommandBuffer,
+                             srcStageMask,
+                             dstStageMask,
+                             0,
+                             0, nullptr,//MemoryBarrier
+                             0, nullptr, //BufferMemoryBarrier
+                             1, &imageMemoryBarrier);
 	}
 }

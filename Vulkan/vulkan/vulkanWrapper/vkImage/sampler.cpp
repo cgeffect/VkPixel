@@ -13,9 +13,10 @@ namespace FF::Wrapper {
 		createInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 		createInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
 
-		createInfo.anisotropyEnable = VK_TRUE;
-		createInfo.maxAnisotropy = 16;
+		createInfo.anisotropyEnable = VK_TRUE;//各向异性
+		createInfo.maxAnisotropy = 16; //VK_FILTER_LINEAR 模式下, 采样16
 
+        //超出0-1的部分填充颜色
 		createInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
 
 		//我们是否使用非归一化的uvw坐标体系0-1

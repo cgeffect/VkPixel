@@ -14,56 +14,54 @@ namespace FF::Wrapper {
 	class Image {
 	public:
 		using Ptr = std::shared_ptr<Image>;
-		static Ptr create(
-			const Device::Ptr& device,
-			const int& width,
-			const int& height,
-			const VkFormat& format,
-			const VkImageType& imageType,
-			const VkImageTiling& tiling,
-			const VkImageUsageFlags& usage,
-			const VkSampleCountFlagBits& sample,
-			const VkMemoryPropertyFlags& properties,//memory
-			const VkImageAspectFlags& aspectFlags//view
-		) { 
-			return std::make_shared<Image>(
-				device,
-				width,
-				height,
-				format,
-				imageType,
-				tiling,
-				usage,
-				sample,
-				properties,
-				aspectFlags
-				); 
+		static Ptr create(const Device::Ptr& device,
+                          const int& width,
+                          const int& height,
+                          const VkFormat& format,
+                          const VkImageType& imageType,
+                          const VkImageTiling& tiling,
+                          const VkImageUsageFlags& usage,
+                          const VkSampleCountFlagBits& sample,
+                          const VkMemoryPropertyFlags& properties,//memory
+                          const VkImageAspectFlags& aspectFlags//view
+			) {
+			return std::make_shared<Image>(device,
+                                           width,
+                                           height,
+                                           format,
+                                           imageType,
+                                           tiling,
+                                           usage,
+                                           sample,
+                                           properties,
+                                           aspectFlags
+                                           );
+				
 		}
 
-		Image(
-			const Device::Ptr &device,
-			const int& width,
-			const int& height,
-			const VkFormat &format,
-			const VkImageType &imageType,
-			const VkImageTiling &tiling,
-			const VkImageUsageFlags &usage,
-			const VkSampleCountFlagBits &sample,
-			const VkMemoryPropertyFlags &properties,//memory
-			const VkImageAspectFlags &aspectFlags//view
+		Image(const Device::Ptr &device,
+              const int& width,
+              const int& height,
+              const VkFormat &format,
+              const VkImageType &imageType,
+              const VkImageTiling &tiling,
+              const VkImageUsageFlags &usage,
+              const VkSampleCountFlagBits &sample,
+              const VkMemoryPropertyFlags &properties,//memory
+              const VkImageAspectFlags &aspectFlags//view
 		);
 
 		~Image();
 
 		//此处属于便捷写法，封装性比较好，但是可以独立作为一个工具函数
 		//写到Tool的类里面
-		void setImageLayout(
-			VkImageLayout newLayout, 
-			VkPipelineStageFlags srcStageMask, 
-			VkPipelineStageFlags dstStageMask,
-			VkImageSubresourceRange subresrouceRange,
-			const CommandPool::Ptr & commandPool
-			);
+		void setImageLayout(VkImageLayout newLayout,
+                            VkPipelineStageFlags srcStageMask,
+                            VkPipelineStageFlags dstStageMask,
+                            VkImageSubresourceRange subresrouceRange,
+                            const CommandPool::Ptr & commandPool
+                            );
+			
 
 		void fillImageData(size_t size, void* pData, const CommandPool::Ptr &commandPool);
 
@@ -84,10 +82,14 @@ namespace FF::Wrapper {
 		size_t				mWidth{ 0 };
 		size_t				mHeight{ 0 };
 		Device::Ptr			mDevice{ nullptr };
+        //cpu端的图片句柄
 		VkImage				mImage{ VK_NULL_HANDLE };
+        //GPU端为图片分配的显存空间
 		VkDeviceMemory		mImageMemory{ VK_NULL_HANDLE };
+        //image对外的访问控制器
 		VkImageView			mImageView{ VK_NULL_HANDLE };
-
+        
+        //
 		VkImageLayout		mLayout{VK_IMAGE_LAYOUT_UNDEFINED};
 	};
 }

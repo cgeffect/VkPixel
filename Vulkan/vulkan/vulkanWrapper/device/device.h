@@ -8,7 +8,7 @@ namespace FF::Wrapper {
 
 	const std::vector<const char*> deviceRequiredExtensions = {
 		VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-		VK_KHR_MAINTENANCE1_EXTENSION_NAME
+		VK_KHR_MAINTENANCE1_EXTENSION_NAME //开启y坐标向上扩展
 	};
 
 	class Device {
