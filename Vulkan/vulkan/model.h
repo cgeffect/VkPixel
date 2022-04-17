@@ -1,6 +1,6 @@
 #pragma once
 #include "base.h"
-#include "vulkanWrapper/buffer.h"
+#include "buffer.h"
 #include "vulkanWrapper/device/device.h"
 #include "vulkanWrapper/uniform/descriptorSet.h"
 #include "vulkanWrapper/uniform/description.h"

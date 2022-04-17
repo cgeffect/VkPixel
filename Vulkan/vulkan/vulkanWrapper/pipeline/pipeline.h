@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../base.h"
+#include "base.h"
 #include "device.h"
 #include "shader.h"
 #include "renderPass.h"

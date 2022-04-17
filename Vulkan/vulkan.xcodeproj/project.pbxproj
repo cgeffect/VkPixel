@@ -158,6 +158,8 @@
 				96687E492802CE7200DCF281 /* device.h */,
 				96687E672802CE7200DCF281 /* instance.cpp */,
 				96687E652802CE7200DCF281 /* instance.h */,
+				96687E602802CE7200DCF281 /* swapChain.cpp */,
+				96687E532802CE7200DCF281 /* swapChain.h */,
 			);
 			path = device;
 			sourceTree = "<group>";
@@ -229,23 +231,13 @@
 		96687E452802CE7200DCF281 /* vulkanWrapper */ = {
 			isa = PBXGroup;
 			children = (
+				96687E4C2802CE7200DCF281 /* CMakeLists.txt */,
+				96E288ED280C4A650029D5E3 /* cmdbuf */,
+				96E288EC280C4A440029D5E3 /* pipeline */,
 				961D32F9280ACDFA00D6AC8F /* window */,
 				961D32F8280ACCC900D6AC8F /* uniform */,
 				961D32F7280ACC1300D6AC8F /* device */,
 				961D32F6280ACBB000D6AC8F /* semaphore */,
-				96687E5F2802CE7200DCF281 /* buffer.cpp */,
-				96687E622802CE7200DCF281 /* buffer.h */,
-				96687E4C2802CE7200DCF281 /* CMakeLists.txt */,
-				96687E6B2802CE7200DCF281 /* commandBuffer.cpp */,
-				96687E5C2802CE7200DCF281 /* commandBuffer.h */,
-				96687E522802CE7200DCF281 /* commandPool.cpp */,
-				96687E4E2802CE7200DCF281 /* commandPool.h */,
-				96687E5B2802CE7200DCF281 /* pipeline.cpp */,
-				96687E642802CE7200DCF281 /* pipeline.h */,
-				96687E542802CE7200DCF281 /* renderPass.cpp */,
-				96687E482802CE7200DCF281 /* renderPass.h */,
-				96687E602802CE7200DCF281 /* swapChain.cpp */,
-				96687E532802CE7200DCF281 /* swapChain.h */,
 			);
 			path = vulkanWrapper;
 			sourceTree = "<group>";
@@ -295,6 +287,30 @@
 				96AC9D7727EC56DF00E6127B /* libglfw.3.3.dylib */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		96E288EC280C4A440029D5E3 /* pipeline */ = {
+			isa = PBXGroup;
+			children = (
+				96687E5B2802CE7200DCF281 /* pipeline.cpp */,
+				96687E642802CE7200DCF281 /* pipeline.h */,
+				96687E542802CE7200DCF281 /* renderPass.cpp */,
+				96687E482802CE7200DCF281 /* renderPass.h */,
+			);
+			path = pipeline;
+			sourceTree = "<group>";
+		};
+		96E288ED280C4A650029D5E3 /* cmdbuf */ = {
+			isa = PBXGroup;
+			children = (
+				96687E5F2802CE7200DCF281 /* buffer.cpp */,
+				96687E622802CE7200DCF281 /* buffer.h */,
+				96687E6B2802CE7200DCF281 /* commandBuffer.cpp */,
+				96687E5C2802CE7200DCF281 /* commandBuffer.h */,
+				96687E522802CE7200DCF281 /* commandPool.cpp */,
+				96687E4E2802CE7200DCF281 /* commandPool.h */,
+			);
+			path = cmdbuf;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

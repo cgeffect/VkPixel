@@ -1,7 +1,5 @@
 #include "application.h"
 
-
-
 namespace FF {
 
 	void Application::run() {

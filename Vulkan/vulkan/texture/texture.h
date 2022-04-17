@@ -4,7 +4,7 @@
 #include "../texture/image.h"
 #include "../texture/sampler.h"
 #include "../vulkanWrapper/device/device.h"
-#include "../vulkanWrapper/commandPool.h"
+#include "commandPool.h"
 
 namespace FF {
 
