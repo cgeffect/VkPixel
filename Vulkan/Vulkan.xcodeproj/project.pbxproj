@@ -59,13 +59,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9607E663280EFECA007D5559 /* vs.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = vs.spv; sourceTree = "<group>"; };
 		961D32A328053F0C00D6AC8F /* bgra.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgra.jpg; sourceTree = "<group>"; };
 		96687E312802CE7200DCF281 /* uniformManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uniformManager.h; sourceTree = "<group>"; };
 		96687E332802CE7200DCF281 /* lessionShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lessionShader.frag; sourceTree = "<group>"; };
 		96687E342802CE7200DCF281 /* fs.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = fs.spv; sourceTree = "<group>"; };
-		96687E352802CE7200DCF281 /* vs.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = vs.spv; sourceTree = "<group>"; };
 		96687E362802CE7200DCF281 /* lessionShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lessionShader.vert; sourceTree = "<group>"; };
-		96687E372802CE7200DCF281 /* compile.bat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = compile.bat; sourceTree = "<group>"; };
+		96687E372802CE7200DCF281 /* compile.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = compile.sh; sourceTree = "<group>"; };
 		96687E382802CE7200DCF281 /* application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = application.cpp; sourceTree = "<group>"; };
 		96687E3A2802CE7200DCF281 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		96687E3B2802CE7200DCF281 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
@@ -195,11 +195,11 @@
 		96687E322802CE7200DCF281 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				96687E332802CE7200DCF281 /* lessionShader.frag */,
+				96687E372802CE7200DCF281 /* compile.sh */,
 				96687E342802CE7200DCF281 /* fs.spv */,
-				96687E352802CE7200DCF281 /* vs.spv */,
+				96687E332802CE7200DCF281 /* lessionShader.frag */,
 				96687E362802CE7200DCF281 /* lessionShader.vert */,
-				96687E372802CE7200DCF281 /* compile.bat */,
+				9607E663280EFECA007D5559 /* vs.spv */,
 			);
 			path = shaders;
 			sourceTree = "<group>";

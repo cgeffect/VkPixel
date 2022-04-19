@@ -22,9 +22,9 @@
 
 #include "model.h"
 
+//1 定义UniformBuffer描述符,定义到buffer类里面
+//2 区分model专用的uniform parameters以及全局公用的uniform parameter
 namespace FF {
-	//1 定义UniformBuffer描述符,定义到buffer类里面
-	//2 区分model专用的uniform parameters以及全局公用的uniform parameter
 
 	class Application {
 	public:

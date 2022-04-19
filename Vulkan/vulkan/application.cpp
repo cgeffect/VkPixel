@@ -1,5 +1,10 @@
 #include "application.h"
 
+/*
+ vkCreateInstance()¡ú vkEnumeratePhysicalDevices()¡ú vkCreateDevice()
+ VkDevice <===> GLContext
+ */
+
 namespace FF {
 
 	void Application::run() {
