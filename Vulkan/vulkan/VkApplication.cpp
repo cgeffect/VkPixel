@@ -54,7 +54,6 @@ namespace FF {
 	}
 
 	void VkApplication::createPipeline() {
-		//设置视口
 		VkViewport viewport = {};
 		viewport.x = 0.0f;
 		viewport.y = (float)mHeight; //y轴向上
