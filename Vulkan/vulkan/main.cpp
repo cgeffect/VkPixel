@@ -1,8 +1,9 @@
+
 #include <iostream>
-#include "application.h"
+#include "VkApplication.h"
 
 int main() {
-	FF::Application app;
+	FF::VkApplication app;
 
 	try {
 		app.run();

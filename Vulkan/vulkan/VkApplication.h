@@ -26,11 +26,11 @@
 //2 区分model专用的uniform parameters以及全局公用的uniform parameter
 namespace FF {
 
-	class Application {
+	class VkApplication {
 	public:
-		Application() = default;
+		VkApplication() = default;
 
-		~Application() = default;
+		~VkApplication() = default;
 
 		void run();
 

@@ -1,4 +1,4 @@
-#include "application.h"
+#include "VkApplication.h"
 
 /*
  vkCreateInstance()→ vkEnumeratePhysicalDevices()→ vkCreateDevice()
@@ -7,18 +7,18 @@
 
 namespace FF {
 
-	void Application::run() {
+	void VkApplication::run() {
 		initWindow();
 		initVulkan();
 		mainLoop();
 		cleanUp();
 	}
 
-	void Application::initWindow() {
+	void VkApplication::initWindow() {
 		mWindow = Wrapper::Window::create(mWidth, mHeight);
 	}
 
-	void Application::initVulkan() {
+	void VkApplication::initVulkan() {
 		mInstance = Wrapper::Instance::create(true);
 		mSurface = Wrapper::WindowSurface::create(mInstance, mWindow);
 
@@ -53,7 +53,7 @@ namespace FF {
 		
 	}
 
-	void Application::createPipeline() {
+	void VkApplication::createPipeline() {
 		//设置视口
 		VkViewport viewport = {};
 		viewport.x = 0.0f;
@@ -162,7 +162,7 @@ namespace FF {
 		mPipeline->build();
 	}
 
-	void Application::createRenderPass() {
+	void VkApplication::createRenderPass() {
 		//输入画布的描述
 		VkAttachmentDescription attachmentDes{};
 		attachmentDes.format = mSwapChain->getFormat();
@@ -202,7 +202,7 @@ namespace FF {
 		mRenderPass->buildRenderPass();
 	}
 
-	void Application::createCommandBuffers() {
+	void VkApplication::createCommandBuffers() {
 		for (int i = 0; i < mSwapChain->getImageCount(); ++i) {
 			mCommandBuffers[i] = Wrapper::CommandBuffer::create(mDevice, mCommandPool);
 
@@ -240,7 +240,7 @@ namespace FF {
 		}
 	}
 
-	void Application::createSyncObjects() {
+	void VkApplication::createSyncObjects() {
 		for (int i = 0; i < mSwapChain->getImageCount(); ++i) {
 			auto imageSemaphore = Wrapper::Semaphore::create(mDevice);
 			mImageAvailableSemaphores.push_back(imageSemaphore);
@@ -253,7 +253,7 @@ namespace FF {
 		}
 	}
 
-	void Application::recreateSwapChain() {
+	void VkApplication::recreateSwapChain() {
 		int width = 0, height = 0;
 		glfwGetFramebufferSize(mWindow->getWindow(), &width, &height);
 		while (width == 0 || height == 0) {
@@ -284,7 +284,7 @@ namespace FF {
 		createSyncObjects();
 	}
 
-	void Application::cleanupSwapChain() {
+	void VkApplication::cleanupSwapChain() {
 		mSwapChain.reset();
 		mCommandBuffers.clear();
 		mPipeline.reset();
@@ -295,7 +295,7 @@ namespace FF {
 	}
 
 
-	void Application::mainLoop() {
+	void VkApplication::mainLoop() {
 		while (!mWindow->shouldClose()) {
 			mWindow->pollEvents();
 
@@ -311,7 +311,7 @@ namespace FF {
 		vkDeviceWaitIdle(mDevice->getDevice());
 	}
 
-	void Application::render() {
+	void VkApplication::render() {
 		//等待当前要提交的CommandBuffer执行完毕
 		mFences[mCurrentFrame]->block();
 
@@ -387,7 +387,7 @@ namespace FF {
 		mCurrentFrame = (mCurrentFrame + 1) % mSwapChain->getImageCount();
 	}
 
-	void Application::cleanUp() {
+	void VkApplication::cleanUp() {
 
 		mPipeline.reset();
 

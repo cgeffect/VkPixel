@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		96687E6D2802CE7200DCF281 /* application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96687E382802CE7200DCF281 /* application.cpp */; };
+		96687E6D2802CE7200DCF281 /* VkApplication.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96687E382802CE7200DCF281 /* VkApplication.cpp */; };
 		96687E6E2802CE7200DCF281 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96687E3B2802CE7200DCF281 /* texture.cpp */; };
 		96687E6F2802CE7200DCF281 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96687E442802CE7200DCF281 /* main.cpp */; };
 		96687E702802CE7200DCF281 /* windowSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96687E472802CE7200DCF281 /* windowSurface.cpp */; };
@@ -66,7 +66,7 @@
 		96687E342802CE7200DCF281 /* fs.spv */ = {isa = PBXFileReference; lastKnownFileType = file; path = fs.spv; sourceTree = "<group>"; };
 		96687E362802CE7200DCF281 /* lessionShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lessionShader.vert; sourceTree = "<group>"; };
 		96687E372802CE7200DCF281 /* compile.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = compile.sh; sourceTree = "<group>"; };
-		96687E382802CE7200DCF281 /* application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = application.cpp; sourceTree = "<group>"; };
+		96687E382802CE7200DCF281 /* VkApplication.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VkApplication.cpp; sourceTree = "<group>"; };
 		96687E3A2802CE7200DCF281 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		96687E3B2802CE7200DCF281 /* texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
 		96687E3C2802CE7200DCF281 /* texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		96687E3F2802CE7200DCF281 /* dragonBall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = dragonBall.jpg; sourceTree = "<group>"; };
 		96687E402802CE7200DCF281 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		96687E412802CE7200DCF281 /* model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
-		96687E422802CE7200DCF281 /* application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = application.h; sourceTree = "<group>"; };
+		96687E422802CE7200DCF281 /* VkApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VkApplication.h; sourceTree = "<group>"; };
 		96687E432802CE7200DCF281 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		96687E442802CE7200DCF281 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		96687E462802CE7200DCF281 /* semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = semaphore.h; sourceTree = "<group>"; };
@@ -263,8 +263,8 @@
 		96AC9D6E27EC560600E6127B /* vulkan */ = {
 			isa = PBXGroup;
 			children = (
-				96687E382802CE7200DCF281 /* application.cpp */,
-				96687E422802CE7200DCF281 /* application.h */,
+				96687E382802CE7200DCF281 /* VkApplication.cpp */,
+				96687E422802CE7200DCF281 /* VkApplication.h */,
 				96687E3E2802CE7200DCF281 /* assets */,
 				96687E3D2802CE7200DCF281 /* base.h */,
 				96687E402802CE7200DCF281 /* CMakeLists.txt */,
@@ -375,7 +375,7 @@
 				96687E7B2802CE7200DCF281 /* shader.cpp in Sources */,
 				96687E7F2802CE7200DCF281 /* fence.cpp in Sources */,
 				96687E792802CE7200DCF281 /* pipeline.cpp in Sources */,
-				96687E6D2802CE7200DCF281 /* application.cpp in Sources */,
+				96687E6D2802CE7200DCF281 /* VkApplication.cpp in Sources */,
 				96687E6E2802CE7200DCF281 /* texture.cpp in Sources */,
 				96687E772802CE7200DCF281 /* descriptorSetLayout.cpp in Sources */,
 				96687E7C2802CE7200DCF281 /* buffer.cpp in Sources */,
