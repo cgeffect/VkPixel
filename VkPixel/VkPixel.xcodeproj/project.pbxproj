@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		966265352811046800CF37B1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966265342811046800CF37B1 /* main.cpp */; };
 		96626538281104AD00CF37B1 /* VkApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96626536281104AD00CF37B1 /* VkApp.cpp */; };
+		966265462811073000CF37B1 /* VkPixelDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966265442811073000CF37B1 /* VkPixelDevice.cpp */; };
+		966265492811077F00CF37B1 /* VkPixelInstace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966265472811077F00CF37B1 /* VkPixelInstace.cpp */; };
+		9662654E28110AAB00CF37B1 /* VkPixelWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662654C28110AAA00CF37B1 /* VkPixelWindow.cpp */; };
+		9662655128110AB600CF37B1 /* VkPixelSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662654F28110AB600CF37B1 /* VkPixelSurface.cpp */; };
 		96AC9D7827EC56DF00E6127B /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96AC9D7727EC56DF00E6127B /* libglfw.3.3.dylib */; };
 		96AC9D7A27EC572B00E6127B /* libvulkan.1.3.204.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96AC9D7927EC572B00E6127B /* libvulkan.1.3.204.dylib */; };
 		96AC9D7C27EC573A00E6127B /* libvulkan.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96AC9D7B27EC573A00E6127B /* libvulkan.1.dylib */; };
@@ -43,6 +47,15 @@
 		96626536281104AD00CF37B1 /* VkApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkApp.cpp; sourceTree = "<group>"; };
 		96626537281104AD00CF37B1 /* VkApp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkApp.h; sourceTree = "<group>"; };
 		966265412811054300CF37B1 /* bgra.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bgra.jpg; sourceTree = "<group>"; };
+		966265442811073000CF37B1 /* VkPixelDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelDevice.cpp; sourceTree = "<group>"; };
+		966265452811073000CF37B1 /* VkPixelDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelDevice.h; sourceTree = "<group>"; };
+		966265472811077F00CF37B1 /* VkPixelInstace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelInstace.cpp; sourceTree = "<group>"; };
+		966265482811077F00CF37B1 /* VkPixelInstace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelInstace.h; sourceTree = "<group>"; };
+		9662654B2811080800CF37B1 /* VkPixelBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelBase.h; sourceTree = "<group>"; };
+		9662654C28110AAA00CF37B1 /* VkPixelWindow.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelWindow.cpp; sourceTree = "<group>"; };
+		9662654D28110AAB00CF37B1 /* VkPixelWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelWindow.h; sourceTree = "<group>"; };
+		9662654F28110AB600CF37B1 /* VkPixelSurface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelSurface.cpp; sourceTree = "<group>"; };
+		9662655028110AB600CF37B1 /* VkPixelSurface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelSurface.h; sourceTree = "<group>"; };
 		96AC9D6C27EC560600E6127B /* VkPixel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VkPixel; sourceTree = BUILT_PRODUCTS_DIR; };
 		96AC9D7727EC56DF00E6127B /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../usr/local/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		96AC9D7927EC572B00E6127B /* libvulkan.1.3.204.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.204.dylib; path = ../../VulkanSDK/1.3.204.1/macOS/lib/libvulkan.1.3.204.dylib; sourceTree = "<group>"; };
@@ -85,6 +98,7 @@
 		9662653B2811053300CF37B1 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				9662654B2811080800CF37B1 /* VkPixelBase.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -92,6 +106,10 @@
 		9662653C2811053300CF37B1 /* device */ = {
 			isa = PBXGroup;
 			children = (
+				966265442811073000CF37B1 /* VkPixelDevice.cpp */,
+				966265452811073000CF37B1 /* VkPixelDevice.h */,
+				966265472811077F00CF37B1 /* VkPixelInstace.cpp */,
+				966265482811077F00CF37B1 /* VkPixelInstace.h */,
 			);
 			path = device;
 			sourceTree = "<group>";
@@ -113,6 +131,10 @@
 		9662653F2811054300CF37B1 /* window */ = {
 			isa = PBXGroup;
 			children = (
+				9662654C28110AAA00CF37B1 /* VkPixelWindow.cpp */,
+				9662654D28110AAB00CF37B1 /* VkPixelWindow.h */,
+				9662654F28110AB600CF37B1 /* VkPixelSurface.cpp */,
+				9662655028110AB600CF37B1 /* VkPixelSurface.h */,
 			);
 			path = window;
 			sourceTree = "<group>";
@@ -247,6 +269,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				96626538281104AD00CF37B1 /* VkApp.cpp in Sources */,
+				9662654E28110AAB00CF37B1 /* VkPixelWindow.cpp in Sources */,
+				966265492811077F00CF37B1 /* VkPixelInstace.cpp in Sources */,
+				9662655128110AB600CF37B1 /* VkPixelSurface.cpp in Sources */,
+				966265462811073000CF37B1 /* VkPixelDevice.cpp in Sources */,
 				966265352811046800CF37B1 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,6 +17,23 @@ VkApp::~VkApp() {
 }
 
 void VkApp::run() {
+    initWindow();
+    mainLoop();
     
+    destroy();
+}
+
+void VkApp::mainLoop() {
+    while (!mWindow->shouldClose()) {
+        mWindow->pollEvents();
+    }
+}
+
+void VkApp::destroy() {
+    
+
+}
+void VkApp::initWindow() {
+    mWindow = VkPixelWindow::create(mWidth, mHeight);
 }
 }

@@ -9,6 +9,7 @@
 #define VkApp_hpp
 
 #include <stdio.h>
+#include "src/window/VkPixelWindow.h"
 
 namespace vkpixel {
 class VkApp {
@@ -17,6 +18,20 @@ public:
     ~VkApp();
     
     void run();
+private:
+    void initWindow();
+
+    void mainLoop();
+    
+    void destroy();
+    
+private:
+    unsigned int mWidth{ 800 };
+    unsigned int mHeight{ 600 };
+
+private:
+    
+    VkPixelWindow::Ptr mWindow{ nullptr };
 };
 }
 #endif /* VkApp_hpp */
