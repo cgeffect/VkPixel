@@ -37,13 +37,12 @@ namespace FF {
 		region.levelCount = 1;
 
         //转换为VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL格式
-		mImage->setImageLayout(
-			VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-			VK_PIPELINE_STAGE_TRANSFER_BIT,
-			VK_PIPELINE_STAGE_TRANSFER_BIT,
-			region,
-			commandPool
-		);
+		mImage->setImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                               VK_PIPELINE_STAGE_TRANSFER_BIT,
+                               VK_PIPELINE_STAGE_TRANSFER_BIT,
+                               region,
+                               commandPool);
+			
 
         //数据可以通过VkImage句柄获取
 		mImage->fillImageData(texSize, (void*)pixels, commandPool);

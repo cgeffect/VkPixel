@@ -36,6 +36,7 @@ namespace FF::Wrapper {
 			//对每个DescriptorSet，我们需要把params里面的描述信息，写入其中
 			std::vector<VkWriteDescriptorSet> descriptorSetWrites{};
 			for (const auto& param : params) {
+                //VkWriteDescriptorSet指定binding、set或数组索引号, 根据这个索引号把数据传递到buffer、uniform、sampler2D
 				VkWriteDescriptorSet descriptorSetWrite{};
 				descriptorSetWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 				descriptorSetWrite.dstSet = mDescriptorSets[i];
