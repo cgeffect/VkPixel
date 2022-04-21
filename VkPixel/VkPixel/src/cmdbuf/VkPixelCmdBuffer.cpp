@@ -9,7 +9,7 @@
 
 namespace vkpixel {
 
-VkPixelCmdBuffer::VkPixelCmdBuffer(const VkPixelDevice::Ptr& device, const VkPixelCommonPool::Ptr& commandPool, bool asSecondary) {
+VkPixelCmdBuffer::VkPixelCmdBuffer(const VkPixelDevice::Ptr& device, const VkPixelCmdPool::Ptr& commandPool, bool asSecondary) {
     mDevice = device;
     mCommandPool = commandPool;
 

@@ -1,15 +1,15 @@
 //
-//  VkPixelCommonPool.cpp
+//  VkPixelCmdPool.cpp
 //  VkPixel
 //
 //  Created by Jason on 2022/4/21.
 //
 
-#include "VkPixelCommonPool.h"
+#include "VkPixelCmdPool.h"
 
 namespace vkpixel {
 
-VkPixelCommonPool::VkPixelCommonPool(const VkPixelDevice::Ptr& device, VkCommandPoolCreateFlagBits flag) {
+VkPixelCmdPool::VkPixelCmdPool(const VkPixelDevice::Ptr& device, VkCommandPoolCreateFlagBits flag) {
     mDevice = device;
 
     VkCommandPoolCreateInfo createInfo{};
@@ -26,7 +26,7 @@ VkPixelCommonPool::VkPixelCommonPool(const VkPixelDevice::Ptr& device, VkCommand
     }
 }
 
-VkPixelCommonPool::~VkPixelCommonPool() {
+VkPixelCmdPool::~VkPixelCmdPool() {
     if (mCommandPool != VK_NULL_HANDLE) {
         vkDestroyCommandPool(mDevice->getDevice(), mCommandPool, nullptr);
     }

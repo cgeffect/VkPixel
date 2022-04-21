@@ -7,7 +7,7 @@
 
 #include "VkPixelBuffer.h"
 #include "../cmdbuf/VkPixelCmdBuffer.h"
-#include"../cmdbuf/VkPixelCommonPool.h"
+#include"../cmdbuf/VkPixelCmdPool.h"
 
 namespace vkpixel {
 VkPixelBuffer::Ptr VkPixelBuffer::createVertexBuffer(const VkPixelDevice::Ptr& device, VkDeviceSize size, void* pData) {
@@ -138,7 +138,7 @@ void VkPixelBuffer::updateBufferByStage(void* data, size_t size) {
 }
 
 void VkPixelBuffer::copyBuffer(const VkBuffer& srcBuffer, const VkBuffer& dstBuffer, VkDeviceSize size) {
-    auto commandPool = VkPixelCommonPool::create(mDevice);
+    auto commandPool = VkPixelCmdPool::create(mDevice);
     auto commandBuffer = VkPixelCmdBuffer::create(mDevice, commandPool);
 
     commandBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);

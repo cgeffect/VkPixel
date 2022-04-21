@@ -1,12 +1,12 @@
 //
-//  VkPixelCommonPool.hpp
+//  VkPixelCmdPool.hpp
 //  VkPixel
 //
 //  Created by Jason on 2022/4/21.
 //
 
-#ifndef VkPixelCommonPool_hpp
-#define VkPixelCommonPool_hpp
+#ifndef VkPixelCmdPool_hpp
+#define VkPixelCmdPool_hpp
 
 #include <stdio.h>
 
@@ -15,16 +15,16 @@
 
 namespace vkpixel {
 
-class VkPixelCommonPool {
+class VkPixelCmdPool {
 public:
-    using Ptr = std::shared_ptr<VkPixelCommonPool>;
+    using Ptr = std::shared_ptr<VkPixelCmdPool>;
     static Ptr create(const VkPixelDevice::Ptr& device, VkCommandPoolCreateFlagBits flag = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) {
-        return std::make_shared<VkPixelCommonPool>(device, flag);
+        return std::make_shared<VkPixelCmdPool>(device, flag);
     }
 
-    VkPixelCommonPool(const VkPixelDevice::Ptr &device, VkCommandPoolCreateFlagBits flag = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
+    VkPixelCmdPool(const VkPixelDevice::Ptr &device, VkCommandPoolCreateFlagBits flag = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
 
-    ~VkPixelCommonPool();
+    ~VkPixelCmdPool();
 
     [[nodiscard]] auto getCommandPool() const { return mCommandPool; }
 
@@ -33,4 +33,4 @@ private:
     VkPixelDevice::Ptr mDevice{ nullptr };
 };
 }
-#endif /* VkPixelCommonPool_hpp */
+#endif /* VkPixelCmdPool_hpp */

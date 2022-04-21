@@ -116,7 +116,7 @@ namespace vkpixel {
                                VkPipelineStageFlags srcStageMask,
                                VkPipelineStageFlags dstStageMask,
                                VkImageSubresourceRange subresrouceRange,
-                               const VkPixelCommonPool::Ptr& commandPool
+                               const VkPixelCmdPool::Ptr& commandPool
                            ) {
         
         VkImageMemoryBarrier imageMemoryBarrier{};
@@ -168,7 +168,7 @@ namespace vkpixel {
     }
 
     //image data 复制到buffer里
-    void Image::fillImageData(size_t size, void* pData, const VkPixelCommonPool::Ptr& commandPool) {
+    void Image::fillImageData(size_t size, void* pData, const VkPixelCmdPool::Ptr& commandPool) {
         assert(pData);
         assert(size);
 

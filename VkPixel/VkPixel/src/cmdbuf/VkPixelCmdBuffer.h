@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 #include "../common/VkPixelBase.h"
-#include "VkPixelCommonPool.h"
+#include "VkPixelCmdPool.h"
 #include "../device/VkPixelDevice.h"
 
 namespace vkpixel {
@@ -19,11 +19,11 @@ namespace vkpixel {
     class VkPixelCmdBuffer {
     public:
         using Ptr = std::shared_ptr<VkPixelCmdBuffer>;
-        static Ptr create(const VkPixelDevice::Ptr& device, const VkPixelCommonPool::Ptr& commandPool, bool asSecondary = false) {
+        static Ptr create(const VkPixelDevice::Ptr& device, const VkPixelCmdPool::Ptr& commandPool, bool asSecondary = false) {
             return std::make_shared<VkPixelCmdBuffer>(device, commandPool, asSecondary);
         }
 
-        VkPixelCmdBuffer(const VkPixelDevice::Ptr &device, const VkPixelCommonPool::Ptr &commandPool, bool asSecondary = false);
+        VkPixelCmdBuffer(const VkPixelDevice::Ptr &device, const VkPixelCmdPool::Ptr &commandPool, bool asSecondary = false);
 
         ~VkPixelCmdBuffer();
 
@@ -79,7 +79,7 @@ namespace vkpixel {
     private:
         VkCommandBuffer mCommandBuffer{ VK_NULL_HANDLE };
         VkPixelDevice::Ptr mDevice{ nullptr };
-        VkPixelCommonPool::Ptr mCommandPool{ nullptr };
+        VkPixelCmdPool::Ptr mCommandPool{ nullptr };
     };
 }
 
