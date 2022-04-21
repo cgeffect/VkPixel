@@ -12,7 +12,7 @@
 
 namespace vkpixel {
 
-VkPixelTexture::VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCmdPool::Ptr& commandPool, const std::string &imageFilePath) {
+VkPixelTexture::VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCommandPool::Ptr& commandPool, const std::string &imageFilePath) {
     
     mDevice = device;
 

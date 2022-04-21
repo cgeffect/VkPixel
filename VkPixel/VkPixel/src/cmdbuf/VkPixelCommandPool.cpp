@@ -5,11 +5,11 @@
 //  Created by Jason on 2022/4/21.
 //
 
-#include "VkPixelCmdPool.h"
+#include "VkPixelCommandPool.h"
 
 namespace vkpixel {
 
-VkPixelCmdPool::VkPixelCmdPool(const VkPixelDevice::Ptr& device, VkCommandPoolCreateFlagBits flag) {
+VkPixelCommandPool::VkPixelCommandPool(const VkPixelDevice::Ptr& device, VkCommandPoolCreateFlagBits flag) {
     mDevice = device;
 
     VkCommandPoolCreateInfo createInfo{};
@@ -26,7 +26,7 @@ VkPixelCmdPool::VkPixelCmdPool(const VkPixelDevice::Ptr& device, VkCommandPoolCr
     }
 }
 
-VkPixelCmdPool::~VkPixelCmdPool() {
+VkPixelCommandPool::~VkPixelCommandPool() {
     if (mCommandPool != VK_NULL_HANDLE) {
         vkDestroyCommandPool(mDevice->getDevice(), mCommandPool, nullptr);
     }

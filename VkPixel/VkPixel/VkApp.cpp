@@ -41,7 +41,7 @@ void VkApplication::initVulkan() {
 
     mSwapChain->createFrameBuffers(mRenderPass);
 
-    mCommandPool = VkPixelCmdPool::create(mDevice);
+    mCommandPool = VkPixelCommandPool::create(mDevice);
 
     //descriptor ===========================
     mUniformManager = VkPixelUniform::create();
@@ -211,7 +211,7 @@ void VkApplication::createRenderPass() {
 
 void VkApplication::createCommandBuffers() {
     for (int i = 0; i < mSwapChain->getImageCount(); ++i) {
-        mCommandBuffers[i] = VkPixelCmdBuffer::create(mDevice, mCommandPool);
+        mCommandBuffers[i] = VkPixelCommandBuffer::create(mDevice, mCommandPool);
 
         mCommandBuffers[i]->begin();
 

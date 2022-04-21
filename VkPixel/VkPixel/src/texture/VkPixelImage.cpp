@@ -6,7 +6,7 @@
 //
 
 #include "VkPixelImage.h"
-#include "../cmdbuf/VkPixelCmdBuffer.h"
+#include "../cmdbuf/VkPixelCommandBuffer.h"
 #include "../cmdbuf/VkPixelBuffer.h"
 
 namespace vkpixel {
@@ -116,7 +116,7 @@ void VkPixelImage::setImageLayout(VkImageLayout newLayout,
                            VkPipelineStageFlags srcStageMask,
                            VkPipelineStageFlags dstStageMask,
                            VkImageSubresourceRange subresrouceRange,
-                           const VkPixelCmdPool::Ptr& commandPool
+                           const VkPixelCommandPool::Ptr& commandPool
                        ) {
     
     VkImageMemoryBarrier imageMemoryBarrier{};
@@ -159,7 +159,7 @@ void VkPixelImage::setImageLayout(VkImageLayout newLayout,
     mLayout = newLayout;
 
     //image拷贝
-    auto commandBuffer = VkPixelCmdBuffer::create(mDevice, commandPool);
+    auto commandBuffer = VkPixelCommandBuffer::create(mDevice, commandPool);
     commandBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     commandBuffer->transferImageLayout(imageMemoryBarrier, srcStageMask, dstStageMask);
     commandBuffer->end();
@@ -168,14 +168,14 @@ void VkPixelImage::setImageLayout(VkImageLayout newLayout,
 }
 
 //image data 复制到buffer里
-void VkPixelImage::fillImageData(size_t size, void* pData, const VkPixelCmdPool::Ptr& commandPool) {
+void VkPixelImage::fillImageData(size_t size, void* pData, const VkPixelCommandPool::Ptr& commandPool) {
     assert(pData);
     assert(size);
 
     //把pData包装成VkBuffer
     auto stageBuffer = VkPixelBuffer::createStageBuffer(mDevice, size, pData);
 
-    auto commandBuffer = VkPixelCmdBuffer::create(mDevice, commandPool);
+    auto commandBuffer = VkPixelCommandBuffer::create(mDevice, commandPool);
     commandBuffer->begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
     //再把VkBuffer包装成VkImage
     commandBuffer->copyBufferToImage(stageBuffer->getBuffer(), mImage, mLayout, (uint32_t)mWidth, (uint32_t)mHeight);

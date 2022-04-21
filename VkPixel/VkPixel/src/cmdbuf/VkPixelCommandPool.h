@@ -15,16 +15,16 @@
 
 namespace vkpixel {
 
-class VkPixelCmdPool {
+class VkPixelCommandPool {
 public:
-    using Ptr = std::shared_ptr<VkPixelCmdPool>;
+    using Ptr = std::shared_ptr<VkPixelCommandPool>;
     static Ptr create(const VkPixelDevice::Ptr& device, VkCommandPoolCreateFlagBits flag = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT) {
-        return std::make_shared<VkPixelCmdPool>(device, flag);
+        return std::make_shared<VkPixelCommandPool>(device, flag);
     }
 
-    VkPixelCmdPool(const VkPixelDevice::Ptr &device, VkCommandPoolCreateFlagBits flag = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
+    VkPixelCommandPool(const VkPixelDevice::Ptr &device, VkCommandPoolCreateFlagBits flag = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT);
 
-    ~VkPixelCmdPool();
+    ~VkPixelCommandPool();
 
     [[nodiscard]] auto getCommandPool() const { return mCommandPool; }
 

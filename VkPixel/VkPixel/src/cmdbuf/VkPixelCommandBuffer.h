@@ -11,21 +11,21 @@
 #include <stdio.h>
 
 #include "../common/VkPixelBase.h"
-#include "VkPixelCmdPool.h"
+#include "VkPixelCommandPool.h"
 #include "../device/VkPixelDevice.h"
 
 namespace vkpixel {
 
-    class VkPixelCmdBuffer {
+    class VkPixelCommandBuffer {
     public:
-        using Ptr = std::shared_ptr<VkPixelCmdBuffer>;
-        static Ptr create(const VkPixelDevice::Ptr& device, const VkPixelCmdPool::Ptr& commandPool, bool asSecondary = false) {
-            return std::make_shared<VkPixelCmdBuffer>(device, commandPool, asSecondary);
+        using Ptr = std::shared_ptr<VkPixelCommandBuffer>;
+        static Ptr create(const VkPixelDevice::Ptr& device, const VkPixelCommandPool::Ptr& commandPool, bool asSecondary = false) {
+            return std::make_shared<VkPixelCommandBuffer>(device, commandPool, asSecondary);
         }
 
-        VkPixelCmdBuffer(const VkPixelDevice::Ptr &device, const VkPixelCmdPool::Ptr &commandPool, bool asSecondary = false);
+        VkPixelCommandBuffer(const VkPixelDevice::Ptr &device, const VkPixelCommandPool::Ptr &commandPool, bool asSecondary = false);
 
-        ~VkPixelCmdBuffer();
+        ~VkPixelCommandBuffer();
 
         //begin
         //xxx
@@ -79,7 +79,7 @@ namespace vkpixel {
     private:
         VkCommandBuffer mCommandBuffer{ VK_NULL_HANDLE };
         VkPixelDevice::Ptr mDevice{ nullptr };
-        VkPixelCmdPool::Ptr mCommandPool{ nullptr };
+        VkPixelCommandPool::Ptr mCommandPool{ nullptr };
     };
 }
 

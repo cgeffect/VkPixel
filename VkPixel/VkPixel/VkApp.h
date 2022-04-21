@@ -19,8 +19,8 @@
 #include "src/texture/VkPixelShader.h"
 #include "src/pipeline/VkPixelPipeline.h"
 #include "src/pipeline/VkPixelRenderPass.h"
-#include "src/cmdbuf/VkPixelCmdPool.h"
-#include "src/cmdbuf/VkPixelCmdBuffer.h"
+#include "src/cmdbuf/VkPixelCommandPool.h"
+#include "src/cmdbuf/VkPixelCommandBuffer.h"
 #include "src/common/VkPxielSemaphore.h"
 #include "src/common/VkPixelFence.h"
 #include "src/cmdbuf/VkPixelBuffer.h"
@@ -79,9 +79,9 @@ private:
     VkPixelSwapChain::Ptr mSwapChain{ nullptr };
     VkPixelPipeline::Ptr mPipeline{ nullptr };
     VkPixelRenderPass::Ptr mRenderPass{ nullptr };
-    VkPixelCmdPool::Ptr mCommandPool{ nullptr };
+    VkPixelCommandPool::Ptr mCommandPool{ nullptr };
 
-    std::vector<VkPixelCmdBuffer::Ptr> mCommandBuffers{};
+    std::vector<VkPixelCommandBuffer::Ptr> mCommandBuffers{};
 
     std::vector<VkPxielSemaphore::Ptr> mImageAvailableSemaphores{};
     std::vector<VkPxielSemaphore::Ptr> mRenderFinishedSemaphores{};

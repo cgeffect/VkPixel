@@ -5,11 +5,11 @@
 //  Created by Jason on 2022/4/21.
 //
 
-#include "VkPixelCmdBuffer.h"
+#include "VkPixelCommandBuffer.h"
 
 namespace vkpixel {
 
-VkPixelCmdBuffer::VkPixelCmdBuffer(const VkPixelDevice::Ptr& device, const VkPixelCmdPool::Ptr& commandPool, bool asSecondary) {
+VkPixelCommandBuffer::VkPixelCommandBuffer(const VkPixelDevice::Ptr& device, const VkPixelCommandPool::Ptr& commandPool, bool asSecondary) {
     mDevice = device;
     mCommandPool = commandPool;
 
@@ -24,13 +24,13 @@ VkPixelCmdBuffer::VkPixelCmdBuffer(const VkPixelDevice::Ptr& device, const VkPix
     }
 }
 
-VkPixelCmdBuffer::~VkPixelCmdBuffer() {
+VkPixelCommandBuffer::~VkPixelCommandBuffer() {
     if (mCommandBuffer != VK_NULL_HANDLE) {
         vkFreeCommandBuffers(mDevice->getDevice(), mCommandPool->getCommandPool(), 1, &mCommandBuffer);
     }
 }//会随着CommandPool析构，而析构释放
 
-void VkPixelCmdBuffer::begin(VkCommandBufferUsageFlags flag, const VkCommandBufferInheritanceInfo& inheritance) {
+void VkPixelCommandBuffer::begin(VkCommandBufferUsageFlags flag, const VkCommandBufferInheritanceInfo& inheritance) {
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = flag;
@@ -41,54 +41,54 @@ void VkPixelCmdBuffer::begin(VkCommandBufferUsageFlags flag, const VkCommandBuff
     }
 }
 
-void VkPixelCmdBuffer::beginRenderPass(
+void VkPixelCommandBuffer::beginRenderPass(
     const VkRenderPassBeginInfo& renderPassBeginInfo,
     const VkSubpassContents& subPassContents
 ) {
     vkCmdBeginRenderPass(mCommandBuffer, &renderPassBeginInfo, subPassContents);
 }
 
-void VkPixelCmdBuffer::bindGraphicPipeline(const VkPipeline& pipeline) {
+void VkPixelCommandBuffer::bindGraphicPipeline(const VkPipeline& pipeline) {
     vkCmdBindPipeline(mCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
 
-void VkPixelCmdBuffer::bindVertexBuffer(const std::vector<VkBuffer>& buffers) {
+void VkPixelCommandBuffer::bindVertexBuffer(const std::vector<VkBuffer>& buffers) {
     std::vector<VkDeviceSize> offsets(buffers.size(), 0);
 
     vkCmdBindVertexBuffers(mCommandBuffer, 0, static_cast<uint32_t>(buffers.size()), buffers.data(), offsets.data());
 }
 
-void VkPixelCmdBuffer::bindIndexBuffer(const VkBuffer& buffer) {
+void VkPixelCommandBuffer::bindIndexBuffer(const VkBuffer& buffer) {
     vkCmdBindIndexBuffer(mCommandBuffer, buffer, 0, VK_INDEX_TYPE_UINT32);
 }
 
-void VkPixelCmdBuffer::bindDescriptorSet(const VkPipelineLayout layout, const VkDescriptorSet &descriptorSet) {
+void VkPixelCommandBuffer::bindDescriptorSet(const VkPipelineLayout layout, const VkDescriptorSet &descriptorSet) {
     vkCmdBindDescriptorSets(mCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, layout, 0, 1, &descriptorSet, 0, nullptr);
 }
 
-void VkPixelCmdBuffer::draw(size_t vertexCount) {
-    vkCmdDraw(mCommandBuffer, vertexCount, 1, 0, 0);
+void VkPixelCommandBuffer::draw(size_t vertexCount) {
+    vkCmdDraw(mCommandBuffer, (uint32_t)vertexCount, 1, 0, 0);
 }
 
-void VkPixelCmdBuffer::drawIndex(size_t indexCount) {
-    vkCmdDrawIndexed(mCommandBuffer, indexCount, 1, 0, 0, 0);
+void VkPixelCommandBuffer::drawIndex(size_t indexCount) {
+    vkCmdDrawIndexed(mCommandBuffer, (uint32_t)indexCount, 1, 0, 0, 0);
 }
 
-void VkPixelCmdBuffer::endRenderPass() {
+void VkPixelCommandBuffer::endRenderPass() {
     vkCmdEndRenderPass(mCommandBuffer);
 }
 
-void VkPixelCmdBuffer::end() {
+void VkPixelCommandBuffer::end() {
     if (vkEndCommandBuffer(mCommandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Error:failed to end Command Buffer");
     }
 }
 
-void VkPixelCmdBuffer::copyBufferToBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, uint32_t copyInfoCount, const std::vector<VkBufferCopy>& copyInfos) {
+void VkPixelCommandBuffer::copyBufferToBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, uint32_t copyInfoCount, const std::vector<VkBufferCopy>& copyInfos) {
     vkCmdCopyBuffer(mCommandBuffer, srcBuffer, dstBuffer, copyInfoCount, copyInfos.data());
 }
 
-void VkPixelCmdBuffer::copyBufferToImage(VkBuffer srcBuffer, VkImage dstImage, VkImageLayout dstImageLayout, uint32_t width, uint32_t height) {
+void VkPixelCommandBuffer::copyBufferToImage(VkBuffer srcBuffer, VkImage dstImage, VkImageLayout dstImageLayout, uint32_t width, uint32_t height) {
     VkBufferImageCopy region{};
     region.bufferOffset = 0;
 
@@ -106,7 +106,7 @@ void VkPixelCmdBuffer::copyBufferToImage(VkBuffer srcBuffer, VkImage dstImage, V
     vkCmdCopyBufferToImage(mCommandBuffer, srcBuffer, dstImage, dstImageLayout, 1, &region);
 }
 
-void VkPixelCmdBuffer::submitSync(VkQueue queue, VkFence fence) {
+void VkPixelCommandBuffer::submitSync(VkQueue queue, VkFence fence) {
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
     submitInfo.commandBufferCount = 1;
@@ -117,7 +117,7 @@ void VkPixelCmdBuffer::submitSync(VkQueue queue, VkFence fence) {
     vkQueueWaitIdle(queue);
 }
 
-void VkPixelCmdBuffer::transferImageLayout(const VkImageMemoryBarrier &imageMemoryBarrier, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) {
+void VkPixelCommandBuffer::transferImageLayout(const VkImageMemoryBarrier &imageMemoryBarrier, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask) {
     vkCmdPipelineBarrier(mCommandBuffer,
                          srcStageMask,
                          dstStageMask,

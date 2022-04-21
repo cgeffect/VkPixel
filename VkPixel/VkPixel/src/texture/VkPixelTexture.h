@@ -14,7 +14,7 @@
 #include "VkPixelImage.h"
 #include "VkPixelSampler.h"
 #include "../device/VkPixelDevice.h"
-#include "../cmdbuf/VkPixelCmdPool.h"
+#include "../cmdbuf/VkPixelCommandPool.h"
 
 namespace vkpixel {
 
@@ -22,11 +22,11 @@ namespace vkpixel {
 class VkPixelTexture {
 public:
     using Ptr = std::shared_ptr<VkPixelTexture>;
-    static Ptr create(const VkPixelDevice::Ptr& device, const VkPixelCmdPool::Ptr &commandPool, const std::string& imageFilePath) {
+    static Ptr create(const VkPixelDevice::Ptr& device, const VkPixelCommandPool::Ptr &commandPool, const std::string& imageFilePath) {
         return std::make_shared<VkPixelTexture>(device, commandPool, imageFilePath);
     }
 
-    VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCmdPool::Ptr& commandPool, const std::string &imageFilePath);
+    VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCommandPool::Ptr& commandPool, const std::string &imageFilePath);
 
     ~VkPixelTexture();
 

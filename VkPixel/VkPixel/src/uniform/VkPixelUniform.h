@@ -16,7 +16,7 @@
 #include "VkPixelDescriptorSet.h"
 #include "VkPixelDescriptor.h"
 #include "../device/VkPixelDevice.h"
-#include "../cmdbuf/VkPixelCmdPool.h"
+#include "../cmdbuf/VkPixelCommandPool.h"
 
 namespace vkpixel {
 
@@ -29,7 +29,7 @@ public:
 
     ~VkPixelUniform();
 
-    void init(const VkPixelDevice::Ptr &device, const VkPixelCmdPool::Ptr &commandPool, int frameCount);
+    void init(const VkPixelDevice::Ptr &device, const VkPixelCommandPool::Ptr &commandPool, int frameCount);
 
     void update(const VPMatrices &vpMatrices, const ObjectUniform &objectUniform, const int& frameCount);
 

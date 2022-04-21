@@ -12,7 +12,7 @@
 
 #include "../common/VkPixelBase.h"
 #include "../device/VkPixelDevice.h"
-#include "../cmdbuf/VkPixelCmdPool.h"
+#include "../cmdbuf/VkPixelCommandPool.h"
 
 namespace vkpixel {
 /*
@@ -69,11 +69,11 @@ public:
                         VkPipelineStageFlags srcStageMask,
                         VkPipelineStageFlags dstStageMask,
                         VkImageSubresourceRange subresrouceRange,
-                        const VkPixelCmdPool::Ptr & commandPool
+                        const VkPixelCommandPool::Ptr & commandPool
                         );
         
 
-    void fillImageData(size_t size, void* pData, const VkPixelCmdPool::Ptr &commandPool);
+    void fillImageData(size_t size, void* pData, const VkPixelCommandPool::Ptr &commandPool);
 
     [[nodiscard]] auto getImage() const { return mImage; }
 

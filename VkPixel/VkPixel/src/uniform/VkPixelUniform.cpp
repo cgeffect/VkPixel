@@ -17,7 +17,7 @@ VkPixelUniform::~VkPixelUniform() {
 
 }
 
-void VkPixelUniform::init(const VkPixelDevice::Ptr& device, const VkPixelCmdPool::Ptr& commandPool, int frameCount) {
+void VkPixelUniform::init(const VkPixelDevice::Ptr& device, const VkPixelCommandPool::Ptr& commandPool, int frameCount) {
     mDevice = device;
 
     //uniform参数0, VPMatrices, 只设置参数类型, 不更新数据, 更新数据在update函数
