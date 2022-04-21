@@ -11,7 +11,7 @@
 
 int main() {
     
-    vkpixel::VkApp app;
+    vkpixel::VkApplication app;
     try {
         app.run();
     }
