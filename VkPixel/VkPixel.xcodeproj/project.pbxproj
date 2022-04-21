@@ -152,13 +152,6 @@
 			path = pipline;
 			sourceTree = "<group>";
 		};
-		9662653E2811054300CF37B1 /* texture */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = texture;
-			sourceTree = "<group>";
-		};
 		9662653F2811054300CF37B1 /* window */ = {
 			isa = PBXGroup;
 			children = (
@@ -178,7 +171,7 @@
 			path = resource;
 			sourceTree = "<group>";
 		};
-		966265422811054300CF37B1 /* shader */ = {
+		966265422811054300CF37B1 /* texture */ = {
 			isa = PBXGroup;
 			children = (
 				9662655828112D4B00CF37B1 /* VkPixelShader.cpp */,
@@ -186,15 +179,14 @@
 				9662655B28112DC400CF37B1 /* VkPixelImage.cpp */,
 				9662655C28112DC400CF37B1 /* VkPixelImage.h */,
 			);
-			path = shader;
+			path = texture;
 			sourceTree = "<group>";
 		};
 		966265432811055800CF37B1 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				966265402811054300CF37B1 /* resource */,
-				966265422811054300CF37B1 /* shader */,
-				9662653E2811054300CF37B1 /* texture */,
+				966265422811054300CF37B1 /* texture */,
 				9662653F2811054300CF37B1 /* window */,
 				9662653D2811053800CF37B1 /* pipline */,
 				966265392811053300CF37B1 /* buffer */,
