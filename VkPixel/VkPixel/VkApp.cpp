@@ -8,13 +8,6 @@
 #include "VkApp.h"
 
 namespace vkpixel {
-VkApp::VkApp() {
-    
-}
-
-VkApp::~VkApp() {
-    
-}
 
 void VkApp::run() {
     initWindow();
@@ -23,17 +16,27 @@ void VkApp::run() {
     destroy();
 }
 
+void VkApp::initWindow() {
+    mWindow = VkPixelWindow::create(mWidth, mHeight);
+}
 void VkApp::mainLoop() {
     while (!mWindow->shouldClose()) {
         mWindow->pollEvents();
     }
 }
 
+
+void VkApp::initVulkan() {
+    
+}
+
+void VkApp::render() {
+    
+}
+
 void VkApp::destroy() {
     
 
 }
-void VkApp::initWindow() {
-    mWindow = VkPixelWindow::create(mWidth, mHeight);
-}
+
 }

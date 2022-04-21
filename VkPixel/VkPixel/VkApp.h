@@ -14,15 +14,20 @@
 namespace vkpixel {
 class VkApp {
 public:
-    VkApp();
-    ~VkApp();
+    //default修饰符表示未实现
+    VkApp() = default;
+    ~VkApp() = default;
     
     void run();
 private:
     void initWindow();
 
+    void initVulkan();
+
     void mainLoop();
-    
+
+    void render();
+
     void destroy();
     
 private:

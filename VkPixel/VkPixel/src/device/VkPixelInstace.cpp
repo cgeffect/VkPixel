@@ -10,10 +10,6 @@
 
 namespace vkpixel {
 
-const std::vector<const char*> validationLayers = {
-    "VK_LAYER_KHRONOS_validation"
-};
-
 //validation layer 回调函数
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallBack(
     VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
