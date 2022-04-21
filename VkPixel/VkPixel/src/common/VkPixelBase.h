@@ -26,4 +26,23 @@
 #include <GLFW/glfw3.h>
 #include <vulkan/vulkan.h>
 
+
+struct VPMatrices {
+    glm::mat4 mViewMatrix;
+    glm::mat4 mProjectionMatrix;
+
+    VPMatrices() {
+        mViewMatrix = glm::mat4(1.0f);
+        mProjectionMatrix = glm::mat4(1.0f);
+    }
+};
+
+struct ObjectUniform {
+    glm::mat4 mModelMatrix;
+
+    ObjectUniform() {
+        mModelMatrix = glm::mat4(1.0f);
+    }
+};
+
 #endif /* VkPixelBase_h */

@@ -21,9 +21,9 @@ namespace vkpixel {
 * 完毕之后，再转换称为ShaderReadOnly
 */
 
-class Image {
+class VkPixelImage {
 public:
-    using Ptr = std::shared_ptr<Image>;
+    using Ptr = std::shared_ptr<VkPixelImage>;
     static Ptr create(const VkPixelDevice::Ptr& device,
                       const int& width,
                       const int& height,
@@ -35,7 +35,7 @@ public:
                       const VkMemoryPropertyFlags& properties,//memory
                       const VkImageAspectFlags& aspectFlags//view
         ) {
-        return std::make_shared<Image>(device,
+        return std::make_shared<VkPixelImage>(device,
                                        width,
                                        height,
                                        format,
@@ -49,7 +49,7 @@ public:
             
     }
 
-    Image(const VkPixelDevice::Ptr &device,
+    VkPixelImage(const VkPixelDevice::Ptr &device,
           const int& width,
           const int& height,
           const VkFormat &format,
@@ -61,7 +61,7 @@ public:
           const VkImageAspectFlags &aspectFlags//view
     );
 
-    ~Image();
+    ~VkPixelImage();
 
     //此处属于便捷写法，封装性比较好，但是可以独立作为一个工具函数
     //写到Tool的类里面

@@ -14,7 +14,7 @@
 #include "VkPixelDevice.h"
 #include "../window/VkPixelWindow.h"
 #include "../window/VkPixelSurface.h"
-#include "../pipline/VkPixelRenderPass.h"
+#include "../pipeline/VkPixelRenderPass.h"
 
 namespace vkpixel {
 

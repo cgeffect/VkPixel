@@ -20,6 +20,15 @@
 		9662656028112E0A00CF37B1 /* VkPixelCmdPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662655E28112E0A00CF37B1 /* VkPixelCmdPool.cpp */; };
 		9662656328112F7100CF37B1 /* VkPixelBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662656128112F7100CF37B1 /* VkPixelBuffer.cpp */; };
 		9662656628112F7F00CF37B1 /* VkPixelCmdBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662656428112F7F00CF37B1 /* VkPixelCmdBuffer.cpp */; };
+		9662656D2811402100CF37B1 /* VkPixelSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662656B2811402100CF37B1 /* VkPixelSampler.cpp */; };
+		96626570281140A900CF37B1 /* VkPixelTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662656E281140A900CF37B1 /* VkPixelTexture.cpp */; };
+		96626574281142B200CF37B1 /* VkPixelPipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96626572281142B200CF37B1 /* VkPixelPipeline.cpp */; };
+		966265772811445C00CF37B1 /* VkPixelFence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966265752811445C00CF37B1 /* VkPixelFence.cpp */; };
+		9662657A281144FD00CF37B1 /* VkPxielSemaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96626578281144FD00CF37B1 /* VkPxielSemaphore.cpp */; };
+		9662657E281145F500CF37B1 /* VkPixelDescriptor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662657C281145F500CF37B1 /* VkPixelDescriptor.cpp */; };
+		966265812811465100CF37B1 /* VkPixelDescriptorPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9662657F2811465100CF37B1 /* VkPixelDescriptorPool.cpp */; };
+		966265842811473C00CF37B1 /* VkPixelDescriptorSetLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 966265822811473C00CF37B1 /* VkPixelDescriptorSetLayout.cpp */; };
+		96626587281147EA00CF37B1 /* VkPixelDescriptorSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96626585281147EA00CF37B1 /* VkPixelDescriptorSet.cpp */; };
 		96AC9D7827EC56DF00E6127B /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96AC9D7727EC56DF00E6127B /* libglfw.3.3.dylib */; };
 		96AC9D7A27EC572B00E6127B /* libvulkan.1.3.204.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96AC9D7927EC572B00E6127B /* libvulkan.1.3.204.dylib */; };
 		96AC9D7C27EC573A00E6127B /* libvulkan.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 96AC9D7B27EC573A00E6127B /* libvulkan.1.dylib */; };
@@ -77,6 +86,25 @@
 		9662656228112F7100CF37B1 /* VkPixelBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelBuffer.h; sourceTree = "<group>"; };
 		9662656428112F7F00CF37B1 /* VkPixelCmdBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelCmdBuffer.cpp; sourceTree = "<group>"; };
 		9662656528112F7F00CF37B1 /* VkPixelCmdBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelCmdBuffer.h; sourceTree = "<group>"; };
+		9662656B2811402100CF37B1 /* VkPixelSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelSampler.cpp; sourceTree = "<group>"; };
+		9662656C2811402100CF37B1 /* VkPixelSampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelSampler.h; sourceTree = "<group>"; };
+		9662656E281140A900CF37B1 /* VkPixelTexture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelTexture.cpp; sourceTree = "<group>"; };
+		9662656F281140A900CF37B1 /* VkPixelTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelTexture.h; sourceTree = "<group>"; };
+		96626571281140CA00CF37B1 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stb_image.h; path = ../../../../Vulkan/vulkan/stb_image.h; sourceTree = "<group>"; };
+		96626572281142B200CF37B1 /* VkPixelPipeline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelPipeline.cpp; sourceTree = "<group>"; };
+		96626573281142B200CF37B1 /* VkPixelPipeline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelPipeline.h; sourceTree = "<group>"; };
+		966265752811445C00CF37B1 /* VkPixelFence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelFence.cpp; sourceTree = "<group>"; };
+		966265762811445C00CF37B1 /* VkPixelFence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelFence.h; sourceTree = "<group>"; };
+		96626578281144FD00CF37B1 /* VkPxielSemaphore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPxielSemaphore.cpp; sourceTree = "<group>"; };
+		96626579281144FD00CF37B1 /* VkPxielSemaphore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPxielSemaphore.h; sourceTree = "<group>"; };
+		9662657C281145F500CF37B1 /* VkPixelDescriptor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelDescriptor.cpp; sourceTree = "<group>"; };
+		9662657D281145F500CF37B1 /* VkPixelDescriptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelDescriptor.h; sourceTree = "<group>"; };
+		9662657F2811465100CF37B1 /* VkPixelDescriptorPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelDescriptorPool.cpp; sourceTree = "<group>"; };
+		966265802811465100CF37B1 /* VkPixelDescriptorPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelDescriptorPool.h; sourceTree = "<group>"; };
+		966265822811473C00CF37B1 /* VkPixelDescriptorSetLayout.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelDescriptorSetLayout.cpp; sourceTree = "<group>"; };
+		966265832811473C00CF37B1 /* VkPixelDescriptorSetLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelDescriptorSetLayout.h; sourceTree = "<group>"; };
+		96626585281147EA00CF37B1 /* VkPixelDescriptorSet.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VkPixelDescriptorSet.cpp; sourceTree = "<group>"; };
+		96626586281147EA00CF37B1 /* VkPixelDescriptorSet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VkPixelDescriptorSet.h; sourceTree = "<group>"; };
 		96AC9D6C27EC560600E6127B /* VkPixel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VkPixel; sourceTree = BUILT_PRODUCTS_DIR; };
 		96AC9D7727EC56DF00E6127B /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../usr/local/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
 		96AC9D7927EC572B00E6127B /* libvulkan.1.3.204.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libvulkan.1.3.204.dylib; path = ../../VulkanSDK/1.3.204.1/macOS/lib/libvulkan.1.3.204.dylib; sourceTree = "<group>"; };
@@ -102,11 +130,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		966265392811053300CF37B1 /* buffer */ = {
+		966265392811053300CF37B1 /* uniform */ = {
 			isa = PBXGroup;
 			children = (
+				9662657C281145F500CF37B1 /* VkPixelDescriptor.cpp */,
+				9662657D281145F500CF37B1 /* VkPixelDescriptor.h */,
+				9662657F2811465100CF37B1 /* VkPixelDescriptorPool.cpp */,
+				966265802811465100CF37B1 /* VkPixelDescriptorPool.h */,
+				966265822811473C00CF37B1 /* VkPixelDescriptorSetLayout.cpp */,
+				966265832811473C00CF37B1 /* VkPixelDescriptorSetLayout.h */,
+				96626585281147EA00CF37B1 /* VkPixelDescriptorSet.cpp */,
+				96626586281147EA00CF37B1 /* VkPixelDescriptorSet.h */,
 			);
-			path = buffer;
+			path = uniform;
 			sourceTree = "<group>";
 		};
 		9662653A2811053300CF37B1 /* cmdbuf */ = {
@@ -126,6 +162,10 @@
 			isa = PBXGroup;
 			children = (
 				9662654B2811080800CF37B1 /* VkPixelBase.h */,
+				966265752811445C00CF37B1 /* VkPixelFence.cpp */,
+				966265762811445C00CF37B1 /* VkPixelFence.h */,
+				96626578281144FD00CF37B1 /* VkPxielSemaphore.cpp */,
+				96626579281144FD00CF37B1 /* VkPxielSemaphore.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -143,13 +183,15 @@
 			path = device;
 			sourceTree = "<group>";
 		};
-		9662653D2811053800CF37B1 /* pipline */ = {
+		9662653D2811053800CF37B1 /* pipeline */ = {
 			isa = PBXGroup;
 			children = (
 				9662655528112AD700CF37B1 /* VkPixelRenderPass.cpp */,
 				9662655628112AD700CF37B1 /* VkPixelRenderPass.h */,
+				96626572281142B200CF37B1 /* VkPixelPipeline.cpp */,
+				96626573281142B200CF37B1 /* VkPixelPipeline.h */,
 			);
-			path = pipline;
+			path = pipeline;
 			sourceTree = "<group>";
 		};
 		9662653F2811054300CF37B1 /* window */ = {
@@ -174,10 +216,15 @@
 		966265422811054300CF37B1 /* texture */ = {
 			isa = PBXGroup;
 			children = (
+				96626571281140CA00CF37B1 /* stb_image.h */,
 				9662655828112D4B00CF37B1 /* VkPixelShader.cpp */,
 				9662655928112D4B00CF37B1 /* VkPixelShader.h */,
 				9662655B28112DC400CF37B1 /* VkPixelImage.cpp */,
 				9662655C28112DC400CF37B1 /* VkPixelImage.h */,
+				9662656B2811402100CF37B1 /* VkPixelSampler.cpp */,
+				9662656C2811402100CF37B1 /* VkPixelSampler.h */,
+				9662656E281140A900CF37B1 /* VkPixelTexture.cpp */,
+				9662656F281140A900CF37B1 /* VkPixelTexture.h */,
 			);
 			path = texture;
 			sourceTree = "<group>";
@@ -188,8 +235,8 @@
 				966265402811054300CF37B1 /* resource */,
 				966265422811054300CF37B1 /* texture */,
 				9662653F2811054300CF37B1 /* window */,
-				9662653D2811053800CF37B1 /* pipline */,
-				966265392811053300CF37B1 /* buffer */,
+				9662653D2811053800CF37B1 /* pipeline */,
+				966265392811053300CF37B1 /* uniform */,
 				9662653A2811053300CF37B1 /* cmdbuf */,
 				9662653B2811053300CF37B1 /* common */,
 				9662653C2811053300CF37B1 /* device */,
@@ -297,17 +344,26 @@
 			files = (
 				9662655728112AD700CF37B1 /* VkPixelRenderPass.cpp in Sources */,
 				9662655D28112DC400CF37B1 /* VkPixelImage.cpp in Sources */,
+				966265812811465100CF37B1 /* VkPixelDescriptorPool.cpp in Sources */,
+				96626587281147EA00CF37B1 /* VkPixelDescriptorSet.cpp in Sources */,
 				96626538281104AD00CF37B1 /* VkApp.cpp in Sources */,
+				9662657E281145F500CF37B1 /* VkPixelDescriptor.cpp in Sources */,
 				9662654E28110AAB00CF37B1 /* VkPixelWindow.cpp in Sources */,
+				9662656D2811402100CF37B1 /* VkPixelSampler.cpp in Sources */,
 				9662656028112E0A00CF37B1 /* VkPixelCmdPool.cpp in Sources */,
 				9662656328112F7100CF37B1 /* VkPixelBuffer.cpp in Sources */,
 				966265492811077F00CF37B1 /* VkPixelInstace.cpp in Sources */,
+				9662657A281144FD00CF37B1 /* VkPxielSemaphore.cpp in Sources */,
+				96626570281140A900CF37B1 /* VkPixelTexture.cpp in Sources */,
 				9662655128110AB600CF37B1 /* VkPixelSurface.cpp in Sources */,
 				966265462811073000CF37B1 /* VkPixelDevice.cpp in Sources */,
 				9662656628112F7F00CF37B1 /* VkPixelCmdBuffer.cpp in Sources */,
 				9662655A28112D4B00CF37B1 /* VkPixelShader.cpp in Sources */,
+				96626574281142B200CF37B1 /* VkPixelPipeline.cpp in Sources */,
 				9662655428111CB200CF37B1 /* VkPixelSwapChain.cpp in Sources */,
+				966265772811445C00CF37B1 /* VkPixelFence.cpp in Sources */,
 				966265352811046800CF37B1 /* main.cpp in Sources */,
+				966265842811473C00CF37B1 /* VkPixelDescriptorSetLayout.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
