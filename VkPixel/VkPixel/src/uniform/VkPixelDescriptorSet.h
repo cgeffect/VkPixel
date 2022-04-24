@@ -51,7 +51,10 @@ public:
 
     ~VkPixelDescriptorSet();
 
-    [[nodiscard]] auto getDescriptorSet(int frameCount) const { return mDescriptorSets[frameCount]; }
+    [[nodiscard]] auto getDescriptorSet(int frameCount) const {
+        VkDescriptorSet set = mDescriptorSets[frameCount];
+        return set;
+    }
 
 private:
     std::vector<VkDescriptorSet> mDescriptorSets{};

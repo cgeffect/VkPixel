@@ -33,9 +33,14 @@ public:
 
     void update(const VPMatrices &vpMatrices, const ObjectUniform &objectUniform, const int& frameCount);
 
-    [[nodiscard]] auto getDescriptorLayout() const { return mDescriptorSetLayout; }
+    [[nodiscard]] auto getDescriptorLayout() const {
+        return mDescriptorSetLayout;
+    }
 
-    [[nodiscard]] auto getDescriptorSet(int frameCount) const { return mDescriptorSet->getDescriptorSet(frameCount); }
+    [[nodiscard]] auto getDescriptorSet(int frameCount) const {
+        VkDescriptorSet set = mDescriptorSet->getDescriptorSet(frameCount);
+        return set;
+    }
 
 private:
     VkPixelDevice::Ptr mDevice{ nullptr };

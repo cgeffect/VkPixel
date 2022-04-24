@@ -65,12 +65,21 @@ void VkPixelUniform::init(const VkPixelDevice::Ptr& device, const VkPixelCommand
      */
     //https://www.oreilly.com/library/view/vulkan-cookbook/9781786468154/assets/B05542-08-03-1.png
     //Uniform 由描述符和描述符池进行管理。 描述符有助于将资源与着色器连接起来。 但它可能会经常变化；因此，分配是通过预先分配的描述符缓冲区（称为描述符池 descriptor pool）来执行的。
+    
+    /*
+     Vulkan也为此提供了不同的方法。原则上，uniform数据可以通过三种方式输入：
+     统一缓冲区绑定：作为DescriptorSet的一部分，这相当于OpenGL中的任意glBindBufferRange（GL_UNIFORM_BUFFER，dset.binding，dset.bufferOffset，dset.bufferSize）。CommandBuffer实际绑定的所有信息都存储在DescriptorSet本身中。
+     统一缓冲区动态绑定：与上面类似，但稍后在录制CommandBuffer时能够提供bufferOffset，有点像这个伪代码：CommandBuffer->BindDescriptorSet（setNumber，descriptorSet，&offset）。从较大的缓冲区分配子分配统一缓冲区时，使用起来非常实用。
+     Push Constants：PushConstants是存储在CommandBuffer中的统一值，可以从着色器访问，类似于单个全局统一缓冲区。它们提供了足够的字节来容纳一些矩阵或索引值，对原始数据的解释是着色器。您可能还记得OpenGL提供的glProgramEnvParameter提供了类似的东西。这些值使用CommandBuffer记录，之后无法更改：CommandBuffer->PushConstant（偏移、大小和数据）
+     https://developer.nvidia.com/vulkan-shader-resource-binding
+     */
     mDescriptorSetLayout = VkPixelDescriptorSetLayout::create(device);
     mDescriptorSetLayout->build(mUniformParams);
 
     mDescriptorPool = VkPixelDescriptorPool::create(device);
     mDescriptorPool->build(mUniformParams, frameCount);
 
+    //VkDescriptorSet是和VkBuffer绑定的, 着色器通过VkDescriptorSet读取VkBuffer里的数据, VkDescriptorSet又是从VkDescriptorPool里获取的
     mDescriptorSet = VkPixelDescriptorSet::create(device, mUniformParams, mDescriptorSetLayout, mDescriptorPool, frameCount);
 
 }
