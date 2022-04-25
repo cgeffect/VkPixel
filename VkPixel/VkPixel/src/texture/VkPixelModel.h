@@ -104,6 +104,7 @@ public:
         std::vector<VkVertexInputAttributeDescription> attributeDes{};
         attributeDes.resize(3);
 
+        //layout(location = x) in, x 的值是location
         attributeDes[0].binding = 0;
         attributeDes[0].location = 0;
         attributeDes[0].format = VK_FORMAT_R32G32B32_SFLOAT;
