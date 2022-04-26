@@ -33,9 +33,11 @@ void VkPixelSubPass::buildSubPassDescription() {
     if (mColorAttachmentReferences.empty()) {
         throw std::runtime_error("Error: color attachment group is empty!");
     }
+    //子 pass 在流水线中的绑定点
     mSubPassDescription.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
-
+    //colorAttachment个数
     mSubPassDescription.colorAttachmentCount = static_cast<uint32_t>(mColorAttachmentReferences.size());
+    //colorAttachment指针引用, VkAttachmentReference
     mSubPassDescription.pColorAttachments = mColorAttachmentReferences.data();
 
     mSubPassDescription.inputAttachmentCount = static_cast<uint32_t>(mInputAttachmentReferences.size());
@@ -55,11 +57,16 @@ VkPixelRenderPass::~VkPixelRenderPass() {
     }
 }
 
-void VkPixelRenderPass::addSubPass(const VkPixelSubPass& subpass) { mSubPasses.push_back(subpass); }
+void VkPixelRenderPass::addSubPass(const VkPixelSubPass& subpass) {
+    mSubPasses.push_back(subpass);
+}
 
-void VkPixelRenderPass::addDependency(const VkSubpassDependency& dependency) { mDependencies.push_back(dependency); }
+void VkPixelRenderPass::addDependency(const VkSubpassDependency& dependency) {
+    mDependencies.push_back(dependency);
+}
 
-void VkPixelRenderPass::addAttachment(const VkAttachmentDescription& attachmentDes) { mAttachmentDescriptions.push_back(attachmentDes); }
+void VkPixelRenderPass::addAttachment(const VkAttachmentDescription& attachmentDes) { mAttachmentDescriptions.push_back(attachmentDes);
+}
 
 void VkPixelRenderPass::buildRenderPass() {
     if (mSubPasses.empty() || mAttachmentDescriptions.empty() || mDependencies.empty()) {

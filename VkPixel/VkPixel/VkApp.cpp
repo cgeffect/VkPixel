@@ -170,42 +170,55 @@ void VkApplication::createPipeline() {
 }
 
 void VkApplication::createRenderPass() {
-    //输入画布的描述
+    //1. 创建renderPass的描述, 一个colorAttachment对应一个VkAttachmentDescription
     VkAttachmentDescription attachmentDes{};
-    attachmentDes.format = mSwapChain->getFormat();
-    attachmentDes.samples = VK_SAMPLE_COUNT_1_BIT;
-    attachmentDes.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-    attachmentDes.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-    attachmentDes.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-    attachmentDes.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-    attachmentDes.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    attachmentDes.format = mSwapChain->getFormat(); //swapchain格式相同
+    attachmentDes.samples = VK_SAMPLE_COUNT_1_BIT; //采样数量为1，即不开启多重采样
+    attachmentDes.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR; //加载是是否清楚画布?
+    attachmentDes.storeOp = VK_ATTACHMENT_STORE_OP_STORE; //是否存储数据?
+    attachmentDes.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE; //不关心模板
+    attachmentDes.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;//不关心模板
+    attachmentDes.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;//
     attachmentDes.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
-
     mRenderPass->addAttachment(attachmentDes);
 
+    //创建子流程
+    /*
+     一个 Render Pass 可以有多个 subpass 存在，即一个“子渲染流程”。每一个后处理特效需要读取前一个特效的 attachment，所以跑完所有特效就会有一系列的 pass。如果这个特效着色的时候只用到了上一个特效的对应像素，则可以把它们设置为 subpass 并且打包成一个大的 pass。
+     注意使用的场景, 是下一个效果只用到了上一个的像素数据
+     */
     //对于画布的索引设置以及格式要求
     VkAttachmentReference attachmentRef{};
-    attachmentRef.attachment = 0;
+    //这个编号和 Fragment Shader 中的 layout 是对应的。例如我在 shader 里面有 layout(location = 0) out vec4 outColor，
+    //那么这里的 color attachment 的colorAttachmentRef.attachment 就要为 0。就是输出, 最终的数据会被输出到这个attachment
+    attachmentRef.attachment = 0;//attachment的编号,
     attachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-
-    //创建子流程
+    
+    //2.创建subPass
     VkPixelSubPass subPass{};
     subPass.addColorAttachmentReference(attachmentRef);
+    //2.1 subPass描述VkSubpassDescription
     subPass.buildSubPassDescription();
-
     mRenderPass->addSubPass(subPass);
 
-    //子流程之间的依赖关系
+    //3. 子流程之间的依赖关系, 依赖起到关联subpasses 的作用。
+    //需要注意的是，虽然在本例中只创建了一个 subpass，但是在这个显式创建的 subpass 的前后还有隐藏（implicit）的 subpass。这些隐藏的 subpass 我们并不能控制。
+    //填写 VkSubpassDependency，用来描述显式创建的subpass与之前隐式subpass的依赖关系。
     VkSubpassDependency dependency{};
+    //前一个subpass。这里使用VK_SUBPASS_EXTERNAL指定这个subpass前一个，也就是那个我们不知道是什么的隐式subpass。
     dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    //后面的subpass。这里直接给出我们显式声明的、有且仅有一个的subpass的编号，也就是0。 注意：srcSubpass值必须低于 dstSubpass，否则subpass的依赖图便存在环了
     dependency.dstSubpass = 0;
     dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     dependency.srcAccessMask = 0;
+    //告诉subpass在dstAccessMask的access操作到来的时候需要等待的dstStageMask阶段。这里我们需要在VK_ACCESS_COLOR_ATTACHMENT_READ_BIT和（按位或）VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT（读写颜色Image）时等待颜色输出阶段，即上述提到的VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
     dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
     dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
 
+    //设置依赖
     mRenderPass->addDependency(dependency);
 
+    //创建renderPass
     mRenderPass->buildRenderPass();
 }
 
