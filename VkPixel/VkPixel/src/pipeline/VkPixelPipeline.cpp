@@ -43,9 +43,9 @@ void VkPixelPipeline::build() {
     for (const auto& shader : mShaders) {
         VkPipelineShaderStageCreateInfo shaderCreateInfo{};
         shaderCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        shaderCreateInfo.stage = shader->getShaderStage();
-        shaderCreateInfo.pName = shader->getShaderEntryPoint().c_str();
-        shaderCreateInfo.module = shader->getShaderModule();
+        shaderCreateInfo.stage = shader->getShaderStage(); //着色器类型
+        shaderCreateInfo.pName = shader->getShaderEntryPoint().c_str();//入口函数 mian
+        shaderCreateInfo.module = shader->getShaderModule();//VkShaderModule
 
         shaderCreateInfos.push_back(shaderCreateInfo);
     }

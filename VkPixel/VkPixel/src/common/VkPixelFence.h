@@ -35,7 +35,7 @@ public:
     void resetFence();
 
     //调用此函数，如果fence没有被激发，那么阻塞在这里，等待激发
-    void block(uint64_t timeout = UINT64_MAX);
+    void waitForFences(uint64_t timeout = UINT64_MAX);
 
     [[nodiscard]] auto getFence() const { return mFence; }
 private:

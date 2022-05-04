@@ -17,6 +17,7 @@ VkPixelCommandBuffer::VkPixelCommandBuffer(const VkPixelDevice::Ptr& device, con
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
     allocInfo.commandBufferCount = 1;
     allocInfo.commandPool = mCommandPool->getCommandPool();
+    //主缓冲还是次要缓冲（实现缓冲的复用）
     allocInfo.level = asSecondary ? VK_COMMAND_BUFFER_LEVEL_SECONDARY : VK_COMMAND_BUFFER_LEVEL_PRIMARY;
 
     if (vkAllocateCommandBuffers(mDevice->getDevice(), &allocInfo, &mCommandBuffer) != VK_SUCCESS) {
@@ -30,31 +31,33 @@ VkPixelCommandBuffer::~VkPixelCommandBuffer() {
     }
 }//会随着CommandPool析构，而析构释放
 
+//1.开始指令的记录
 void VkPixelCommandBuffer::begin(VkCommandBufferUsageFlags flag, const VkCommandBufferInheritanceInfo& inheritance) {
+    //使用VkCommandBufferBeginInfo声明一个“开始录制”的描述结构体。其中flag表示这个command buffer需要怎么被使用
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = flag;
     beginInfo.pInheritanceInfo = &inheritance;
 
+    //开始或重置一个frame buffer的命令录制工作。
     if (vkBeginCommandBuffer(mCommandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("Error:failed to begin commandBuffer");
     }
 }
 
-void VkPixelCommandBuffer::beginRenderPass(
-    const VkRenderPassBeginInfo& renderPassBeginInfo,
-    const VkSubpassContents& subPassContents
-) {
+//2.启动 Render Pass
+void VkPixelCommandBuffer::beginRenderPass(const VkRenderPassBeginInfo& renderPassBeginInfo,
+                                           const VkSubpassContents& subPassContents) {
     vkCmdBeginRenderPass(mCommandBuffer, &renderPassBeginInfo, subPassContents);
 }
 
 void VkPixelCommandBuffer::bindGraphicPipeline(const VkPipeline& pipeline) {
+    //绑定一个图形流水线（Pipeline）。只有绑定了流水线才能够正常执行具体的绘制命令。
     vkCmdBindPipeline(mCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 }
 
 void VkPixelCommandBuffer::bindVertexBuffer(const std::vector<VkBuffer>& buffers) {
     std::vector<VkDeviceSize> offsets(buffers.size(), 0);
-
     vkCmdBindVertexBuffers(mCommandBuffer, 0, static_cast<uint32_t>(buffers.size()), buffers.data(), offsets.data());
 }
 
@@ -67,6 +70,10 @@ void VkPixelCommandBuffer::bindDescriptorSet(const VkPipelineLayout layout, cons
 }
 
 void VkPixelCommandBuffer::draw(size_t vertexCount) {
+    //顶点数量
+    //实例（Instancing）数量，这里为1
+    //vertex buffer 中需要绘制的第一个顶点的偏移量
+    //Instancing 的偏移量
     vkCmdDraw(mCommandBuffer, (uint32_t)vertexCount, 1, 0, 0);
 }
 
@@ -75,10 +82,12 @@ void VkPixelCommandBuffer::drawIndex(size_t indexCount) {
 }
 
 void VkPixelCommandBuffer::endRenderPass() {
+    //结束一个渲染流程。
     vkCmdEndRenderPass(mCommandBuffer);
 }
 
 void VkPixelCommandBuffer::end() {
+    //结束录制一个 Command Buffer
     if (vkEndCommandBuffer(mCommandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("Error:failed to end Command Buffer");
     }

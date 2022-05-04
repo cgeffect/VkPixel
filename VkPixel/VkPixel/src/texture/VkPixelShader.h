@@ -30,6 +30,7 @@ public:
     [[nodiscard]] auto getShaderModule() const { return mShaderModule; }
 
 private:
+    //着色器代码缓存的句柄
     VkShaderModule mShaderModule{ VK_NULL_HANDLE };
     VkPixelDevice::Ptr mDevice{ nullptr };
     std::string mEntryPoint;

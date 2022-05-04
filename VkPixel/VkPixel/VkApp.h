@@ -85,7 +85,7 @@ private:
 
     std::vector<VkPxielSemaphore::Ptr> mImageAvailableSemaphores{};
     std::vector<VkPxielSemaphore::Ptr> mRenderFinishedSemaphores{};
-    std::vector<VkPixelFence::Ptr> mFences{};
+    std::vector<VkPixelFence::Ptr> inFlightFences{};//多帧渲染
 
     VkPixelUniform::Ptr mUniformManager{ nullptr };
 

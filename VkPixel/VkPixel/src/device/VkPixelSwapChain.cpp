@@ -97,6 +97,7 @@ VkPixelSwapChain::VkPixelSwapChain(const VkPixelDevice::Ptr& device, const VkPix
 
 void VkPixelSwapChain::createFrameBuffers(const VkPixelRenderPass::Ptr& renderPass) {
     //创建FrameBuffer
+    //在该案例中，由于 Framebuffer 中的 Color Attachment 直接引用自 Swap Chain Image，因此此处 Framebuffer 和 Swap Chain 中的 image 大小和数量均需要相同
     mSwapChainFrameBuffers.resize(mImageCount);
     for (int i = 0; i < mImageCount; ++i) {
         //FrameBuffer 里面为一帧的数据，比如有n个ColorAttachment 1个DepthStencilAttachment，
@@ -105,7 +106,8 @@ void VkPixelSwapChain::createFrameBuffers(const VkPixelRenderPass::Ptr& renderPa
 
         VkFramebufferCreateInfo frameBufferCreateInfo{};
         frameBufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-        frameBufferCreateInfo.renderPass = renderPass->getRenderPass();
+        frameBufferCreateInfo.renderPass = renderPass->getRenderPass(); //把fbo绑定到renderpass
+        //attachmentCount 和 pAttachments：和 Render Pass 保持一致
         frameBufferCreateInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
         frameBufferCreateInfo.pAttachments = attachments.data();
         frameBufferCreateInfo.width = mSwapChainExtent.width;

@@ -223,18 +223,22 @@ void VkApplication::createRenderPass() {
 }
 
 void VkApplication::createCommandBuffers() {
+    //对于每一个 swap chain image 都对应一个 command buffer。
     for (int i = 0; i < mSwapChain->getImageCount(); ++i) {
         mCommandBuffers[i] = VkPixelCommandBuffer::create(mDevice, mCommandPool);
 
         mCommandBuffers[i]->begin();
 
+        //对于每一个 Command Buffer，首先要启动一个 Render Pass 才能开始指令的记录活动。
         VkRenderPassBeginInfo renderBeginInfo{};
         renderBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+        //指定具体的 render pass 和使用的 framebuffer
         renderBeginInfo.renderPass = mRenderPass->getRenderPass();
         renderBeginInfo.framebuffer = mSwapChain->getFrameBuffer(i);
-        renderBeginInfo.renderArea.offset = { 0, 0 };
-        renderBeginInfo.renderArea.extent = mSwapChain->getExtent();
+        renderBeginInfo.renderArea.offset = { 0, 0 };//渲染偏移位置
+        renderBeginInfo.renderArea.extent = mSwapChain->getExtent();//渲染大小
 
+        //清屏颜色
         VkClearValue clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
         renderBeginInfo.clearValueCount = 1;
         renderBeginInfo.pClearValues = &clearColor;
@@ -269,7 +273,7 @@ void VkApplication::createSyncObjects() {
         mRenderFinishedSemaphores.push_back(renderSemaphore);
 
         auto fence = VkPixelFence::create(mDevice);
-        mFences.push_back(fence);
+        inFlightFences.push_back(fence);
     }
 }
 
@@ -311,7 +315,7 @@ void VkApplication::cleanupSwapChain() {
     mRenderPass.reset();
     mImageAvailableSemaphores.clear();
     mRenderFinishedSemaphores.clear();
-    mFences.clear();
+    inFlightFences.clear();
 }
 
 
@@ -328,22 +332,26 @@ void VkApplication::mainLoop() {
         render();
     }
 
+    //阻塞并等待设备所有队列均空闲时再进行销毁操作。
     vkDeviceWaitIdle(mDevice->getDevice());
 }
 
 void VkApplication::render() {
     //等待当前要提交的CommandBuffer执行完毕
-    mFences[mCurrentFrame]->block();
+    inFlightFences[mCurrentFrame]->waitForFences();
 
     //获取交换链当中的下一帧
     uint32_t imageIndex{ 0 };
-    VkResult result = vkAcquireNextImageKHR(
+    //vkAcquireNextImageKHR 和 vkQueueSubmit 构成了生产者消费者的关系。我们的第一个同步机制在此处体现出来。
+    VkResult result =
+    vkAcquireNextImageKHR(
         mDevice->getDevice(),
         mSwapChain->getSwapChain(),
-        UINT64_MAX,
+        UINT64_MAX,//超时时间，单位为ns
+        //只有从 Swap Chain 上获取到可被渲染一帧之后我们才可以开始进行绘制
         mImageAvailableSemaphores[mCurrentFrame]->getSemaphore(),
         VK_NULL_HANDLE,
-        &imageIndex);
+        &imageIndex);//应该用的 swap chain image 的编号，即为swapChainImage数组下标。
 
     //窗体发生了尺寸变化
     if (result == VK_ERROR_OUT_OF_DATE_KHR) {
@@ -363,8 +371,10 @@ void VkApplication::render() {
     VkSemaphore waitSemaphores[] = { mImageAvailableSemaphores[mCurrentFrame]->getSemaphore() };
     VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
-    submitInfo.waitSemaphoreCount = 1;
-    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.waitSemaphoreCount = 1;//等待几个信号
+    submitInfo.pWaitSemaphores = waitSemaphores;//是什么信号
+    ////在流水线的哪个阶段进行等待
+    //这里需要在最终输出颜色时进行同步等待，所以声明一个VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT}
     submitInfo.pWaitDstStageMask = waitStages;
 
     //指定提交哪些命令
@@ -372,19 +382,22 @@ void VkApplication::render() {
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = &commandBuffer;
 
+    //需要示信（Signal）的信号量：signalSemaphoreCount 和 pSignalSemaphores，接受VkSemaphore[] 数组。此处我们传入 renderFinishedSemaphore，表示只有绘制完毕后我们才能将该图像返还给 Swap Chain 用于呈现。
     VkSemaphore signalSemaphores[] = { mRenderFinishedSemaphores[mCurrentFrame]->getSemaphore()};
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
-    mFences[mCurrentFrame]->resetFence();
-    if (vkQueueSubmit(mDevice->getGraphicQueue(), 1, &submitInfo, mFences[mCurrentFrame]->getFence()) != VK_SUCCESS) {
+    inFlightFences[mCurrentFrame]->resetFence();
+    if (vkQueueSubmit(mDevice->getGraphicQueue(), 1, &submitInfo, inFlightFences[mCurrentFrame]->getFence()) != VK_SUCCESS) {
         throw std::runtime_error("Error:failed to submit renderCommand");
     }
 
+    //呈现图像（Present）
     VkPresentInfoKHR presentInfo{};
     presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
     presentInfo.waitSemaphoreCount = 1;
+    //只有绘制完毕后我们才能将该图像返还给 Swap Chain 用于呈现。
     presentInfo.pWaitSemaphores = signalSemaphores;
 
     VkSwapchainKHR swapChains[] = {mSwapChain->getSwapChain()};
@@ -393,6 +406,7 @@ void VkApplication::render() {
 
     presentInfo.pImageIndices = &imageIndex;
 
+    //vkQueueSubmit 和 vkQueuePresentKHR 构成了生产者消费者的关系。我们的第二个同步机制在此处体现出来。
     result = vkQueuePresentKHR(mDevice->getPresentQueue(), &presentInfo);
 
     //由于驱动程序不一定精准，所以我们还需要用自己的标志位判断
