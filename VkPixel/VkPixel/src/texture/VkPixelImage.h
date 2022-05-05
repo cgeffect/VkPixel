@@ -92,7 +92,7 @@ private:
     size_t                mWidth{ 0 };
     size_t                mHeight{ 0 };
     VkPixelDevice::Ptr            mDevice{ nullptr };
-    //cpu端的图片句柄
+    //cpu端的图片句柄, 纹理对象
     VkImage                mImage{ VK_NULL_HANDLE };
     //GPU端为图片分配的显存空间
     VkDeviceMemory        mImageMemory{ VK_NULL_HANDLE };

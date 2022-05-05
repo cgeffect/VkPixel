@@ -40,17 +40,17 @@ VkPixelDescriptorSet::VkPixelDescriptorSet(const VkPixelDevice::Ptr& device,
 
     
     for (int i = 0; i < frameCount; ++i) {
-        //对每个DescriptorSet，我们需要把params里面的描述信息，写入其中
+        //对每个DescriptorSet，我们需要把params里面的描述信息，写入其中, 描述 Descriptor 和 Set 的关系：
         std::vector<VkWriteDescriptorSet> descriptorSetWrites{};
         for (const auto& param : params) {
             //VkWriteDescriptorSet指定binding、set或数组索引号, 根据这个索引号把数据传递到buffer、uniform、sampler2D
             VkWriteDescriptorSet descriptorSetWrite{};
             descriptorSetWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            descriptorSetWrite.dstSet = mDescriptorSets[i];
-            descriptorSetWrite.dstArrayElement = 0;
-            descriptorSetWrite.descriptorType = param->mDescriptorType;
-            descriptorSetWrite.descriptorCount = param->mCount;
-            descriptorSetWrite.dstBinding = param->mBinding;
+            descriptorSetWrite.dstSet = mDescriptorSets[i];//目标 Descriptor Set。
+            descriptorSetWrite.dstArrayElement = 0;//由于资源描述可以是数组，这里需要指定一个需要更新的数组下标。如果不是数组, 则设置0
+            descriptorSetWrite.descriptorType = param->mDescriptorType;//描述类型。传入一个VkDescriptorType枚举成员
+            descriptorSetWrite.descriptorCount = param->mCount;//从下标开始更新几个数组元素。
+            descriptorSetWrite.dstBinding = param->mBinding;//这个资源描述在资源描述集中的绑定。需要与 Layout 中声明的绑定相同。
             
             if (param->mDescriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER) {
                 //传递attribute信息到顶点着色器, VkDescriptorBufferInfo包含矩阵信息
@@ -66,6 +66,9 @@ VkPixelDescriptorSet::VkPixelDescriptorSet(const VkPixelDevice::Ptr& device,
         }
 
         //更新VkDescriptorSet数组信息
+        /*
+         不要在“渲染时”更新 descriptor sets，即不要在 vkBeginCommandBuffer 到同步机制告诉我们 Command Buffer 已执行完毕（注意不是 vkQueueSubmit），否则会因为没有和绘制指令同步导致数据错误，产生未定义行为。
+         */
         vkUpdateDescriptorSets(mDevice->getDevice(), static_cast<uint32_t>(descriptorSetWrites.size()), descriptorSetWrites.data(), 0, nullptr);
     }
 }

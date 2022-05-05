@@ -248,6 +248,7 @@ void VkApplication::createCommandBuffers() {
 
         mCommandBuffers[i]->bindGraphicPipeline(mPipeline->getPipeline());
 
+        //将其所需要的 Set 绑定在流水线上
         mCommandBuffers[i]->bindDescriptorSet(mPipeline->getLayout(), mUniformManager->getDescriptorSet(mCurrentFrame));
 
         //mCommandBuffers[i]->bindVertexBuffer({ mModel->getVertexBuffer()->getBuffer() });

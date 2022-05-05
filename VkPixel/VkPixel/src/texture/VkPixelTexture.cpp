@@ -44,6 +44,8 @@ VkPixelTexture::VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCo
     region.baseMipLevel = 0;
     region.levelCount = 1;
 
+    //图像布局转换, 从原始数据到创建图像对象需要一次布局转换
+    //接下来将暂存缓冲里的数据拷贝到刚刚为这张图象分配的内存中，但图像数据最好不要直接从 Staging Buffer 中复制，而是要将缓冲中的格式转换成图像需要的格式
     //转换为VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL格式
     mImage->setImageLayout(VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                            VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -52,9 +54,10 @@ VkPixelTexture::VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCo
                            commandPool);
         
 
-    //数据可以通过VkImage句柄获取
+    //数据可以通过VkImage句柄获取, 拷贝缓冲到图像对象
     mImage->fillImageData(texSize, (void*)pixels, commandPool);
 
+    //图像对象到 shader 又需要一次布局转换
     //转换VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL格式
     mImage->setImageLayout(VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
                            VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -64,9 +67,10 @@ VkPixelTexture::VkPixelTexture(const VkPixelDevice::Ptr &device, const VkPixelCo
         
     stbi_image_free(pixels);
 
+    //创建采样器
     mSampler = VkPixelSampler::create(mDevice);
 
-    //纹理描述符
+    //组合采样器
     mImageInfo.imageLayout = mImage->getLayout();
     mImageInfo.imageView = mImage->getImageView();
     mImageInfo.sampler = mSampler->getSampler();

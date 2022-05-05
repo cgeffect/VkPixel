@@ -75,6 +75,8 @@ public:
 
     //顶点数组buffer相关的信息
     std::vector<VkVertexInputBindingDescription> getVertexInputBindingDescriptions() {
+        
+        //解释顶点属性并绑定到着色器中
         std::vector<VkVertexInputBindingDescription> bindingDes{};
         /*bindingDes.resize(1);
 
@@ -84,8 +86,11 @@ public:
 
         bindingDes.resize(3);
 
+        //将会绑定到哪个顶点缓冲。其编号需要和录制 Command Buffer 时 vkCmdBindVertexBuffer 传入的绑定编号相对应，以将同时传入的缓冲绑定在这个顶点属性。
         bindingDes[0].binding = 0;
+        //步长
         bindingDes[0].stride = sizeof(float) * 3;
+        //输入的顶点数据是逐顶点还是逐实例（instance）。这里使用逐顶点VK_VERTEX_INPUT_RATE_VERTEX
         bindingDes[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
         bindingDes[1].binding = 1;
@@ -104,9 +109,11 @@ public:
         std::vector<VkVertexInputAttributeDescription> attributeDes{};
         attributeDes.resize(3);
 
-        //layout(location = x) in, x 的值是location
         attributeDes[0].binding = 0;
+        //layout(location = x) in, x 的值是location
+        //对应着 Vertex Shader 中的 location，例如在 shader 中：layout (location = 0) in vec3 inPos，这里就填 0；
         attributeDes[0].location = 0;
+        //表示有三个值（R32G32B32）以及每个对应单精度浮点数
         attributeDes[0].format = VK_FORMAT_R32G32B32_SFLOAT;
         //attributeDes[0].offset = offsetof(Vertex, mPosition);
         attributeDes[0].offset = 0;
