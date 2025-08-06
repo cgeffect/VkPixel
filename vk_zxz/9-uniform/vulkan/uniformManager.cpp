@@ -1,0 +1,61 @@
+#include "uniformManager.h"
+
+UniformManager::UniformManager() {
+
+}
+
+UniformManager::~UniformManager() {
+
+}
+
+void UniformManager::init(const Wrapper::Device::Ptr& device, int frameCount) {
+    
+    //创建两个uniform信息
+	auto vpParam = Wrapper::UniformParameter::create();
+	vpParam->mBinding = 0;
+	vpParam->mCount = 1;
+	vpParam->mDescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	vpParam->mSize = sizeof(VPMatrices);
+	vpParam->mStage = VK_SHADER_STAGE_VERTEX_BIT;
+	
+    //创建存储uniform的buffer
+	for (int i = 0; i < frameCount; ++i) {
+		auto buffer = Wrapper::Buffer::createUniformBuffer(device, vpParam->mSize, nullptr);
+		vpParam->mBuffers.push_back(buffer);
+	}
+
+	mUniformParams.push_back(vpParam);
+
+	auto objectParam = Wrapper::UniformParameter::create();
+	objectParam->mBinding = 1;
+	objectParam->mCount = 1;
+	objectParam->mDescriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	objectParam->mSize = sizeof(ObjectUniform);
+	objectParam->mStage = VK_SHADER_STAGE_VERTEX_BIT;
+
+	for (int i = 0; i < frameCount; ++i) {
+		auto buffer = Wrapper::Buffer::createUniformBuffer(device, objectParam->mSize, nullptr);
+		objectParam->mBuffers.push_back(buffer);
+	}
+
+	mUniformParams.push_back(objectParam);
+
+    //创建VkDescriptorSetLayout,mBinding表示layout(binding = 0) 的位置, 会通过VkDescriptorSetLayout和VkWriteDescriptorSet共同指定
+	mDescriptorSetLayout = Wrapper::DescriptorSetLayout::create(device);
+	mDescriptorSetLayout->build(mUniformParams);
+
+	mDescriptorPool = Wrapper::DescriptorPool::create(device);
+	mDescriptorPool->build(mUniformParams, frameCount);
+
+    //通过VkDescriptorSetLayout和VkDescriptorPool创建mVkDescriptorSet
+	mDescriptorSet = Wrapper::DescriptorSet::create(device, mUniformParams, mDescriptorSetLayout, mDescriptorPool, frameCount);
+
+}
+
+void UniformManager::update(const VPMatrices& vpMatrices, const ObjectUniform& objectUniform, const int& frameCount) {
+	//update vp matrices
+	mUniformParams[0]->mBuffers[frameCount]->updateBufferByMap((void*)(&vpMatrices), sizeof(VPMatrices));
+
+	//update object uniform
+	mUniformParams[1]->mBuffers[frameCount]->updateBufferByMap((void*)(&objectUniform), sizeof(ObjectUniform));
+}
